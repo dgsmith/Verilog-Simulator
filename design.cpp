@@ -3,13 +3,14 @@ using namespace std;
 
 Design::Design()
 {
+	desname = "default name";
 	
 }
 
 // contains name of the design
 Design::Design(string n)
 {
-	
+	desname = n;
 }
 
 Design::~Design()
