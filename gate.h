@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include "net.h"
+#include "global.h"
 
 using namespace std;
 

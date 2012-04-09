@@ -1,7 +1,7 @@
 CXX = clang++
 CXXFLAGS = -g -W -Wall
 LDFLAGS = -g
-SOURCES = 
+SOURCES = net.cpp gate.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 DEPLOY_FOLDER = pa5
 BINARY = gatesim

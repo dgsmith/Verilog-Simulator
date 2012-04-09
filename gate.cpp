@@ -1,4 +1,4 @@
-#include "gates.h"
+#include "gate.h"
 using namespace std;
 
 //===================================================================//
@@ -7,58 +7,56 @@ using namespace std;
 //
 //
 //===================================================================//
-Gates::Gate()
+Gate::Gate()
 {
 	inst_name = "default name";
 	delay = 1;
 	output = NULL;
 }
 
-Gates::Gate(string n, int d)
+Gate::Gate(string n, int d)
 {
 	inst_name = n;
 	delay = d;
 	output = NULL;
 }
 
-string Gates::name()
+string Gate::name()
 {
 	return inst_name;
 }
 
-void Gates::addInput(Net *n)
+void Gate::addInput(Net *n)
 {
-	Net *newNet = new Net(n);
-	inputs.push(newNet);
+	inputs->push_back(n);
 }
 
-void Gates::addOutput(Net *n)
+void Gate::addOutput(Net *n)
 {
-	if(output == NULL)
-	{
-		Net newOut = new Net(n);
-		output = newOut;
-	}
-	else // trying to assign more than one input!
-		
+  if(output == NULL){
+    output = n;
+  } else {
+    WARN("Output already exists! Overwriting.");
+    output = n;
+  }
 }
 
-vector<Net *> * Gates::getInputs()
+vector<Net *> * Gate::getInputs()
 {
 	return inputs;
 }
 
-Net* Gates::getOutput()
+Net* Gate::getOutput()
 {
 	return output;
 }
 
-int Gates::getNumInputs()
+int Gate::getNumInputs()
 {
-	return (int) inputs.size();
+	return (int) inputs->size();
 }
 
-int Gates::getDelay()
+int Gate::getDelay()
 {
 	return delay;
 }

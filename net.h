@@ -2,6 +2,7 @@
 #define NET_H
 #include <vector>
 #include <string>
+#include "global.h"
 using namespace std;
 
 class Gate;
@@ -10,7 +11,7 @@ class Net {
  public:
   Net();
   Net(string n);
-  ~Net();
+  // ~Net();
   void addDriver(Gate *g);
   void addLoad(Gate *g);
   vector<Gate *> *getLoads();

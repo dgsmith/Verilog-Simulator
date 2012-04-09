@@ -4,7 +4,8 @@
 #include <vector>
 #include <map>
 #include <string>
-#include "gates.h"
+#include "global.h"
+#include "gate.h"
 #include "net.h"
 
 using namespace std;
