@@ -1,16 +1,23 @@
 CXX = clang++
 CXXFLAGS = -g -W -Wall
 LDFLAGS = -g
-SOURCES = gatesim.cpp
+SOURCES = 
 OBJECTS = $(SOURCES:.cpp=.o)
 DEPLOY_FOLDER = pa5
 BINARY = gatesim
 
-gatesim: $(OBJECTS)
+gatesim: $(OBJECTS) gatesim.cpp
 	$(CXX) $(LDFLAGS) -o $@ $^
+
+test_binary: $(OBJECTS) tests.cpp
+	$(CXX) $(LDFLAGS) -o tests $^
+
+tests: test_binary
+	./tests
 
 clean::
 	$(RM) $(BINARY)
+	$(RM) test_suite
 
 .cpp.o:
 	$(CXX) -MMD -MP $(CXXFLAGS) -o $@ -c $<
