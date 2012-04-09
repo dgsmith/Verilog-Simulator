@@ -1,12 +1,29 @@
 #include <iostream>
 #include <ostream>
+#include <regex>
 #include "design.h"
 #include "gate.h"
 #include "net.h"
 
 using namespace std;
 
+#define SEMI ";"
+#define ID "[A-Za-z_][A-Za-z0-9_]"
+#define NUM "[0-9]+"
+#define LEFTPARAM "("
+#define RIGHTPARAM ")"
+#define COMMA ","
+#define POUND "#"
+#define INPUT "input"
+#define OUTPUT "output"
+#define WIRE "wire"
+#define MODULE "module"
+#define ENDMODULE "endmodule"
+#define GATETYPE "[and]|[or]|[nand]|[nor]|[xor]|[not]"
+
 Design *parseThatShit(string ifile);
+
+void match()
 
 Design *parseThatShit(string ifile)
 {
