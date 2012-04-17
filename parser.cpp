@@ -63,26 +63,6 @@ Design *parseThatShit(string ifile)
 			case ERROR:
 				
 		}
-		if(token == "module")
-		{
-			// start of design
-			// get the name first
-			string next_token;
-			getline(ss, next_token, "(");
-			string module_name;
-			next_token >> module_name;
-			// now get the list of ports
-			string port_list;
-			getline(ss, port_list, ")");
-			// parse the list for inputs and outputs
-			stringstream port_list(port_list);
-			while(!port_list.fail()) // will run even if eof bit is set!!
-			{
-				string current_port;
-				getline(port_list,current_port,",");
-				
-			}
-		}
 	}
 }
 
