@@ -74,7 +74,7 @@ And::And()
 	output = NULL;
 }
 
-And::And(string n, int d);
+And::And(string n, int d)
 {
 	
 }
@@ -99,7 +99,7 @@ Or::Or()
 	
 }
 
-Or::Or(string n, int d);
+Or::Or(string n, int d)
 {
 	
 }
@@ -124,7 +124,7 @@ Nor::Nor()
 	
 }
 
-Nor::Nor(string n, int d);
+Nor::Nor(string n, int d)
 {
 	
 }
@@ -149,7 +149,7 @@ Nand::Nand()
 	
 }
 
-Nand::Nand(string n, int d);
+Nand::Nand(string n, int d)
 {
 	
 }
@@ -174,7 +174,7 @@ Xor::Xor()
 	
 }
 
-Xor::Xor(string n, int d);
+Xor::Xor(string n, int d)
 {
 	
 }
@@ -199,7 +199,7 @@ Not::Not()
 	
 }
 
-Not::Not(string n, int d);
+Not::Not(string n, int d)
 {
 	
 }
