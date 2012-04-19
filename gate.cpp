@@ -10,13 +10,16 @@ using namespace std;
 Gate::Gate()
 {
 	inst_name = "Gate";
-	delay = 1;
+	inputs = new vector<Net *>;
+	output = new Net;
 }
 
 Gate::Gate(string n, int d)
 {
 	inst_name = n;
 	delay = d;
+	inputs = new vector<Net *>;
+	output = new Net;
 }
 
 string Gate::name()
@@ -53,7 +56,12 @@ int Gate::getNumInputs()
 
 int Gate::getDelay()
 {
-	return delay;
+	if(delay == 0)	{
+		return 1;
+	}
+	else {
+		return delay;
+	}
 }
 
 void Gate::dumpNetList(ostream& os)
@@ -76,7 +84,7 @@ void Gate::dumpNetList(ostream& os)
 And::And()
 {
 	inst_name = "AND";
-	delay = 1;
+	delay = 0;
 	inputs = new vector<Net *>;
 	output = new Net;
 }
@@ -96,8 +104,13 @@ char And::eval()
 
 void And::dump(ostream &os)
 {
-  os << "and #" << delay << " " << inst_name;
-  
+  if(delay == 0)	{
+		os << "and " << inst_name;
+	}
+	else {
+		os << "and #" << delay << " " << inst_name;
+	}
+	
   dumpNetList(os);
   
   cout << ");" << endl;
@@ -111,7 +124,7 @@ void And::dump(ostream &os)
 Or::Or()
 {
 	inst_name = "OR";
-	delay = 1;
+	delay = 0;
 	inputs = new vector<Net *>;
 	output = new Net;
 }
@@ -131,7 +144,12 @@ char Or::eval()
 
 void Or::dump(ostream &os)
 {
-  os << "or #" << delay << " " << inst_name;
+  if(delay == 0)	{
+		os << "or " << inst_name;
+	}
+	else {
+		os << "or #" << delay << " " << inst_name;
+	}
   
   dumpNetList(os);
   
@@ -146,7 +164,7 @@ void Or::dump(ostream &os)
 Nor::Nor()
 {
 	inst_name = "NOR";
-	delay = 1;
+	delay = 0;
 	inputs = new vector<Net *>;
 	output = new Net;
 }
@@ -166,7 +184,12 @@ char Nor::eval()
 
 void Nor::dump(ostream &os)
 {
-  os << "nor #" << delay << " " << inst_name;
+  if(delay == 0)	{
+		os << "nor " << inst_name;
+	}
+	else {
+		os << "nor #" << delay << " " << inst_name;
+	}
   
   dumpNetList(os);
   
@@ -181,7 +204,7 @@ void Nor::dump(ostream &os)
 Nand::Nand()
 {
 	inst_name = "NAND";
-	delay = 1;
+	delay = 0;
 	inputs = new vector<Net *>;
 	output = new Net;
 }
@@ -201,7 +224,12 @@ char Nand::eval()
 
 void Nand::dump(ostream &os)
 {
-  os << "nand #" << delay << " " << inst_name;
+  if(delay == 0)	{
+		os << "nand " << inst_name;
+	}
+	else {
+		os << "nand #" << delay << " " << inst_name;
+	}
   
   dumpNetList(os);
   
@@ -216,7 +244,7 @@ void Nand::dump(ostream &os)
 Xor::Xor()
 {
 	inst_name = "XOR";
-	delay = 1;
+	delay = 0;
 	inputs = new vector<Net *>;
 	output = new Net;
 }
@@ -236,7 +264,12 @@ char Xor::eval()
 
 void Xor::dump(ostream &os)
 {
-  os << "xor #" << delay << " " << inst_name;
+  if(delay == 0)	{
+		os << "xor " << inst_name;
+	}
+	else {
+		os << "xor #" << delay << " " << inst_name;
+	}
   
   dumpNetList(os);
   
@@ -251,7 +284,7 @@ void Xor::dump(ostream &os)
 Not::Not()
 {
 	inst_name = "NOT";
-	delay = 1;
+	delay = 0;
 	inputs = new vector<Net *>;
 	output = new Net;
 }
@@ -271,7 +304,12 @@ char Not::eval()
 
 void Not::dump(ostream &os)
 {
-  os << "not #" << delay << " " << inst_name;
+  if(delay == 0)	{
+		os << "not " << inst_name;
+	}
+	else {
+		os << "not #" << delay << " " << inst_name;
+	}
   
   dumpNetList(os);
   
