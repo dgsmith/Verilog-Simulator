@@ -13,6 +13,8 @@ using namespace std;
 void dumpToFile(string filename, Design* aDesign)
 {
   ofstream outfile(filename.c_str());
+  outfile << "// Dumped from " << filename << endl;
+  aDesign->dump(outfile); 
   
   outfile.close();
 }

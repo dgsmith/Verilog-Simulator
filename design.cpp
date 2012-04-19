@@ -1,5 +1,6 @@
 #include "design.h"
 #include <stdexcept>
+#include <set>
 using namespace std;
 
 Design::Design()
@@ -180,28 +181,31 @@ vector<Net *> * Design::get_po_nets()
 	return POs;
 }
 
-// same as get_pi_nets
 vector<Net *> * Design::get_wire_nets()
 {
-	vector<string>::iterator po;
-	vector<string>::iterator pi;
-	map<string, Net*>::iterator net;
-	vector<Net *> *wire = new vector<Net *>;
-	for(net = design_nets.begin();net != design_nets.end();net++)
-	{
-		for(po = pos.begin();po != pos.end();po++)
-		{
-			for (pi = pis.begin();pi != pis.end();pi++)
-			{
-				if((net->second->name() != *po) && (net->second->name() != *pi))	{
-					wire->push_back(net->second);
-				}
-				else	{
-					//nothing to see here
-				}
-			}
-		}
-	}
+  // Create a set of inputs and outputs so we can search faster
+  set<string> pios;  
+  for(vector<string>::iterator it=pos.begin(); it!=pos.end(); it++) {
+    pios.insert(*it);
+  }
+  for(vector<string>::iterator it=pis.begin(); it!=pis.end(); it++) {
+    pios.insert(*it);
+  }
+  
+  // To return
+  vector<Net *> *wire = new vector<Net *>;
+  
+  // Iterate through all nets in the map
+  for(map<string, Net *>::iterator it=design_nets.begin(); it!=design_nets.end(); it++) {
+    // If it is not an input or output
+    if(pios.find(it->second->name()) == pios.end())
+    {
+      wire->push_back(it->second);
+    } else {
+      LOG("Skipping " << it->second->name());
+    }
+  }
+  
 	return wire;
 }
 
@@ -232,5 +236,28 @@ vector<Gate *> * Design::all_gates()
 // write out the design in Verilog format to the provided ostream
 void Design::dump(ostream &os)
 {
-	
+  os << "module " << this->name() << "();" << endl;
+  
+  vector<Net*> *v = this->get_pi_nets();
+  for(vector<Net*>::iterator it=v->begin(); it!=v->end(); it++) {
+    os << "\tinput " << (*it)->name() << ";" << endl;
+  }
+  
+  v = this->get_po_nets();
+  for(vector<Net*>::iterator it=v->begin(); it!=v->end(); it++) {
+    os << "\toutput " << (*it)->name() << ";" << endl;
+  }
+  
+  v = this->get_wire_nets();
+  for(vector<Net*>::iterator it=v->begin(); it!=v->end(); it++) {
+    os << "\twire " << (*it)->name() << ";" << endl;
+  }
+  
+  os << endl;
+  
+  vector<Gate*> *g = this->all_gates();
+  for(vector<Gate*>::iterator it=g->begin(); it!=g->end(); it++) {
+    WARN((*it)->name());
+  }
+  
 }
