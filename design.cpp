@@ -32,13 +32,13 @@ void Design::make_name(string n)
 // add an input's name to the list of PIs
 void Design::add_pi(string n)
 {
-	
+	pis.push_back(n);
 }
 
 // add an output's name to list of POs
 void Design::add_po(string n)
 {
-	
+	pos.push_back(n);
 }
 
 // returns NULL or pointer to net object
@@ -58,6 +58,15 @@ Gate* Design::find_gate(string inst_name)
 // allocates a new one and returns a pointer to it.
 Net* Design::add_find_net(string n)
 {
+	map<string, Net*>::iterator it;
+	it = design_nets.find(n);
+	if(it != design_nets.end())	{ // already exists!!
+		return it->second;
+	}
+	else	{ // doesn't exist
+		Net *newNet = new Net(n);
+		return newNet;
+	}
 	
 }
 
@@ -65,7 +74,50 @@ Net* Design::add_find_net(string n)
 // gtype is the enum value of the gate type
 Gate* Design::add_find_gate(int gtype, string n, int d)
 {
-	
+	map<string, Gate*>::iterator it;
+	it = design_gates.find(n);
+	if(it != design_gates.end())	{ // already exists!!
+		return it->second;
+	}
+	else	{ // doesn't exist
+		switch(gtype)	{
+			case AND	:
+			{
+				And *newGate = new And(n,d);
+				return newGate;
+			}
+			case OR		:
+			{
+				Or *newGate = new Or(n,d);
+				return newGate;
+			}
+			case NAND	:
+			{
+				Nand *newGate = new Nand(n,d);
+				return newGate;
+			}
+			case NOR	:
+			{
+				Nor *newGate = new Nor(n,d);
+				return newGate;
+			}
+			case XOR	:
+			{
+				Xor *newGate = new Xor(n,d);
+				return newGate;
+			}
+			case NOT	:
+			{
+				Not *newGate = new Not(n,d);
+				return newGate;
+			}
+			default		:
+			{
+				ERROR("invalid gate type");
+				break;
+			}
+		}
+	}
 }
 
 // allocates and creates a new vector of pointers to the PI Nets

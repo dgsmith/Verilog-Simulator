@@ -9,7 +9,7 @@ using namespace std;
 //===================================================================//
 Gate::Gate()
 {
-	inst_name = "default name";
+	inst_name = "Gate";
 	delay = 1;
 }
 
@@ -64,13 +64,18 @@ int Gate::getDelay()
 //===================================================================//
 And::And()
 {
-	inst_name = "default AND";
+	inst_name = "AND";
 	delay = 1;
+	inputs = new vector<Net *>;
+	output = new Net;
 }
 
 And::And(string n, int d)
 {
-	
+	inst_name = n;
+	delay = d;
+	inputs = new vector<Net *>;
+	output = new Net;
 }
 
 char And::eval()
@@ -103,12 +108,18 @@ void And::dump(ostream &os)
 //===================================================================//
 Or::Or()
 {
-	
+	inst_name = "OR";
+	delay = 1;
+	inputs = new vector<Net *>;
+	output = new Net;
 }
 
 Or::Or(string n, int d)
 {
-	
+	inst_name = n;
+	delay = d;
+	inputs = new vector<Net *>;
+	output = new Net;
 }
 
 char Or::eval()
@@ -128,12 +139,18 @@ void Or::dump(ostream &os)
 //===================================================================//
 Nor::Nor()
 {
-	
+	inst_name = "NOR";
+	delay = 1;
+	inputs = new vector<Net *>;
+	output = new Net;
 }
 
 Nor::Nor(string n, int d)
 {
-	
+	inst_name = n;
+	delay = d;
+	inputs = new vector<Net *>;
+	output = new Net;
 }
 
 char Nor::eval()
@@ -153,12 +170,18 @@ void Nor::dump(ostream &os)
 //===================================================================//
 Nand::Nand()
 {
-	
+	inst_name = "NAND";
+	delay = 1;
+	inputs = new vector<Net *>;
+	output = new Net;
 }
 
 Nand::Nand(string n, int d)
 {
-	
+	inst_name = n;
+	delay = d;
+	inputs = new vector<Net *>;
+	output = new Net;
 }
 
 char Nand::eval()
@@ -178,12 +201,18 @@ void Nand::dump(ostream &os)
 //===================================================================//
 Xor::Xor()
 {
-	
+	inst_name = "XOR";
+	delay = 1;
+	inputs = new vector<Net *>;
+	output = new Net;
 }
 
 Xor::Xor(string n, int d)
 {
-	
+	inst_name = n;
+	delay = d;
+	inputs = new vector<Net *>;
+	output = new Net;
 }
 
 char Xor::eval()
@@ -203,12 +232,18 @@ void Xor::dump(ostream &os)
 //===================================================================//
 Not::Not()
 {
-	
+	inst_name = "NOT";
+	delay = 1;
+	inputs = new vector<Net *>;
+	output = new Net;
 }
 
 Not::Not(string n, int d)
 {
-	
+	inst_name = n;
+	delay = d;
+	inputs = new vector<Net *>;
+	output = new Net;
 }
 
 char Not::eval()
