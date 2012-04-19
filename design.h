@@ -15,13 +15,14 @@ class Design {
   Design();
   Design(string n);
   ~Design();
+	void make_name(string n);
   string name();
   void add_pi(string n);
   void add_po(string n);
   Net *find_net(string net_name);
   Gate *find_gate(string inst_name);
   Net* add_find_net(string n);
-  Gate* add_find_gate(int gtype, string n);
+  Gate* add_find_gate(int gtype, string n, int d);
   vector<Net *> *get_pi_nets();
   vector<Net *> *get_po_nets();
   vector<Net *> *get_wire_nets();

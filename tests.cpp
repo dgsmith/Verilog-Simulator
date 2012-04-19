@@ -1,7 +1,8 @@
 #include "global.h"
 #include <iostream>
 #include <cassert>
-#include "net.h"
+#include "design.h"
+#include "parser.cpp"
 using namespace std;
 
 void test_design()
@@ -34,8 +35,11 @@ void test_parser()
 
 int main (int argc, char const *argv[])
 {
-  test_net();
-  
+  //test_net();
+	Design *aDesign;
+	aDesign = parseThatShit("test.v");
+	
+
   cout << GREEN << "Tests completed." << RESET << endl;
   return 0;
 }

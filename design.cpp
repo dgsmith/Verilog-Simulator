@@ -24,6 +24,11 @@ string Design::name()
 	
 }
 
+void Design::make_name(string n)
+{
+	desname = n;
+}
+
 // add an input's name to the list of PIs
 void Design::add_pi(string n)
 {
@@ -43,7 +48,7 @@ Net* Design::find_net(string net_name)
 }
 
 // same as find_net, but with gates
-Gate* Deisgn::find_gate(string inst_name)
+Gate* Design::find_gate(string inst_name)
 {
 	
 }
@@ -58,13 +63,13 @@ Net* Design::add_find_net(string n)
 
 // same as add_find_net but for gates
 // gtype is the enum value of the gate type
-Gate* Design::add_find_gate(int gtype, string n)
+Gate* Design::add_find_gate(int gtype, string n, int d)
 {
 	
 }
 
 // allocates and creates a new vector of pointers to the PI Nets
-vector<Net *> * Deisgn::get_pi_nets()
+vector<Net *> * Design::get_pi_nets()
 {
 	
 }
