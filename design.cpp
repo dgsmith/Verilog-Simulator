@@ -138,31 +138,88 @@ Gate* Design::add_find_gate(int gtype, string n, int d)
 // allocates and creates a new vector of pointers to the PI Nets
 vector<Net *> * Design::get_pi_nets()
 {
-	
+	vector<string>::iterator name;
+	map<string, Net*>::iterator foundnet;
+	vector<Net *> *PIs = new vector<Net *>;
+	for(name = pis.begin();name != pis.end();name++)
+	{
+		foundnet = design_nets.find(*name);
+		if(foundnet != design_nets.end())	{ // found pi!
+			PIs->push_back(foundnet->second);
+		}
+		else	{
+			//nothing to see here
+		}
+	}
+	return PIs;
 }
 
 // same as get_pi_nets
 vector<Net *> * Design::get_po_nets()
 {
-	
+	vector<string>::iterator name;
+	map<string, Net*>::iterator foundnet;
+	vector<Net *> *POs = new vector<Net *>;
+	for(name = pos.begin();name != pos.end();name++)
+	{
+		foundnet = design_nets.find(*name);
+		if(foundnet != design_nets.end())	{ // found pi!
+			POs->push_back(foundnet->second);
+		}
+		else	{
+			//nothing to see here
+		}
+	}
+	return POs;
 }
 
 // same as get_pi_nets
 vector<Net *> * Design::get_wire_nets()
 {
-	
+	vector<string>::iterator po;
+	vector<string>::iterator pi;
+	map<string, Net*>::iterator net;
+	vector<Net *> *wire = new vector<Net *>;
+	for(net = design_nets.begin();net != design_nets.end();net++)
+	{
+		for(po = pos.begin();po != pos.end();po++)
+		{
+			for (pi = pis.begin();pi != pis.end();pi++)
+			{
+				if((net->second != *po) && (net->second != *pi))	{
+					wire->push_back(net->second);
+				}
+				else	{
+					//nothing to see here
+				}
+			}
+		}
+	}
+	return wire;
 }
 
 // returns pointers to all net objects
 vector<Net *> * Design::all_nets()
 {
-	
+	map<string, Net*>::iterator it;
+	vector<Net *> *all_nets = new vector<Net *>;
+	for(it = design_nets.begin();it != design_nets.end(); it++)
+	{
+		all_nets->push_back(it->second);
+	}
+	return all_nets;
 }
 
 // similar to all_nets but for gates
 vector<Gate *> * Design::all_gates()
 {
-	
+	map<string, Gate*>::iterator it;
+	vector<Gate *> *all_gates = new vector<Gate *>;
+	for(it = design_gates.begin();it != design_gates.end(); it++)
+	{
+		all_gates->push_back(it->second);
+	}
+	return all_gates;
 }
 
 // write out the design in Verilog format to the provided ostream
