@@ -35,6 +35,9 @@ class Gate {
   Net *output;
   string inst_name;
   int delay;
+  
+protected:
+  void dumpNetList(ostream &os);
 };
 
 class And : public Gate {

@@ -25,6 +25,14 @@ void test_gates()
   o->addDriver(g);
   
   i1->printDriversLoads();
+  i2->printDriversLoads();
+  o->printDriversLoads();
+  
+  g->addInput(i1);
+  g->addInput(i2);
+  g->addOutput(o);
+  
+  g->dump(cout);
 }
 
 void test_net()
