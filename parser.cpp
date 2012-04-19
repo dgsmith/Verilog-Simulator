@@ -110,12 +110,20 @@ Design *parseThatShit(string ifilename)
 				// create the gate here
 				if(firsttoken == "and")	{
 					Gate *gatefound = theDesign->add_find_gate(AND,gate.at(1), atoi(gate.at(2).c_str()));
-					gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+					try	{
+						gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+					} catch(range_error &ex)	{
+						ERROR(ex.what());
+					}
 					for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
 					{
 						LOG("inputs:");
 						LOG(*it);
-						gatefound->addInput(theDesign->find_net(*it));
+						try	{
+							gatefound->addInput(theDesign->find_net(*it));
+						} catch(range_error &ex)	{
+								ERROR(ex.what());
+						}
 					}
 				}
 				else if(firsttoken == "or")	{
