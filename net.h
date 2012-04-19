@@ -11,7 +11,10 @@ class Net {
  public:
   Net();
   Net(string n);
-  // ~Net();
+  ~Net() {
+		delete drivers;
+		delete loads;
+	}
   void addDriver(Gate *g);
   void addLoad(Gate *g);
   vector<Gate *> *getLoads();

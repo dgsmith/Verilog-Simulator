@@ -18,7 +18,8 @@ class Gate {
   Gate();
   Gate(string n, int d);
   virtual ~Gate() {
-    LOG("Dto");
+		delete inputs;
+		delete output;
   }
 
   virtual char eval() = 0;
