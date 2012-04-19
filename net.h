@@ -12,8 +12,8 @@ class Net {
   Net();
   Net(string n);
   ~Net() {
-		delete drivers;
-		delete loads;
+		delete [] drivers;
+		delete [] loads;
 	}
   void addDriver(Gate *g);
   void addLoad(Gate *g);

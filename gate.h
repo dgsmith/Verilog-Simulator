@@ -18,8 +18,8 @@ class Gate {
   Gate();
   Gate(string n, int d);
   virtual ~Gate() {
-		delete inputs;
-		delete output;
+		delete [] inputs;
+		delete [] output;
   }
 
   virtual char eval() = 0;
