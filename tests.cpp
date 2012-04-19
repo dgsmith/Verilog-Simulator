@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cassert>
 #include "design.h"
-#include "parser.cpp"
+#include "parser.h"
 using namespace std;
 
 void test_design()
