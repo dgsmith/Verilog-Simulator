@@ -1,48 +1,10 @@
-#include "global.h"
-#include <iostream>
-#include <ostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <regex.h>
-#include "design.h"
-#include "gate.h"
-#include "net.h"
-
-using namespace std;
-
-bool regex_match(string target, string pattern)
-{
-    int status;
-    regex_t re;
-    	
-    if (regcomp(&re, pattern.c_str(), REG_EXTENDED|REG_NOSUB) != 0) {
-		return false;
-    }
-    status = regexec(&re, target.c_str(), (size_t) 0, NULL, 0);
-    regfree(&re);
-    if (status != 0) {
-        return false;      /* no match */
-    }
-	
-	// Matches
-    return true;
-}
-
-enum {COMMENT, BLANK, MODULE, INPUT, OUTPUT, WIRE, GATE, END, ERROR};
-	
-#define ID "[A-Za-z_][A-Za-z0-9_]*"
-#define NUM "[0-9]+"
-#define GATE_TYPE ""and" | "or" | "nand" | "nor" | "xor" | "not""
-
-int lineType(string currentline);
-void parenParser(vector<string> *ports, string input);
-void gateInfo(string type, string info, vector<string> *gate);
+#include "parser.h"
 
 Design *parseThatShit(string ifilename)
 {
 	Design *theDesign = new Design;
 	vector<string> port_list;
+	vector<string>::iterator it;
 	//vector<string> inputs;
 	//vector<string> outputs;
 	//vector<string> wires;
@@ -60,24 +22,33 @@ Design *parseThatShit(string ifilename)
 		{
 			case COMMENT :
 				// comment line
+				LOG("Comment line found");
 				break;
 			case BLANK :
-				
+				LOG("Blank line found");
 				break;
 			case MODULE :
 			{
 				// line defining a module
+				LOG("Module line");
 				string possibleIDModule;
 				getline(ss ,possibleIDModule, '(');
 				if(regex_match(possibleIDModule, ID))	{
 					// was an id
-					theDesign->make_name(possibleIDModule);
+					string designName = removeWhitespace(possibleIDModule);
+					theDesign->make_name(designName);
+					LOG("Module ID was ID:");
+					LOG(designName);
 				}
 				
 				string possiblePortsModule;
 				getline(ss, possiblePortsModule, ')');
 				parenParser(&port_list, possiblePortsModule);
-				
+				LOG("Module port list:");
+				for(it=port_list.begin();it < port_list.end(); it++)
+				{
+					LOG(*it);
+				}
 				break;
 			}
 			case INPUT :
@@ -86,10 +57,11 @@ Design *parseThatShit(string ifilename)
 				string possibleIDInput;
 				getline(ss,possibleIDInput,';'); // get up to semicolon
 				if(regex_match(possibleIDInput, ID))	{
-					//inputs.push_back(possibleIDInput); // get id from selection and add it to the list of inputs
-					//Net netfound(possibleIDInput);
-					theDesign->add_pi(possibleIDInput);
-					Net *netfound = theDesign->add_find_net(possibleIDInput);
+					string inputID = removeWhitespace(possibleIDInput);
+					theDesign->add_pi(inputID);
+					Net *netfound = theDesign->add_find_net(inputID);
+					LOG("Got input:");
+					LOG(inputID);
 				}
 				
 				break;
@@ -100,10 +72,11 @@ Design *parseThatShit(string ifilename)
 				string possibleIDOutput;
 				getline(ss,possibleIDOutput,';'); // get up to semicolon
 				if(regex_match(possibleIDOutput, ID))	{
-					//outputs.push_back(possibleIDOutput);
-					//Net netfound(possibleIDOutput);
-					theDesign->add_po(possibleIDOutput);
-					Net *netfound = theDesign->add_find_net(possibleIDOutput);
+					string outputID = removeWhitespace(possibleIDOutput);
+					theDesign->add_po(outputID);
+					Net *netfound = theDesign->add_find_net(outputID);
+					LOG("Got output:");
+					LOG(outputID);
 				}
 				
 				break;
@@ -114,9 +87,10 @@ Design *parseThatShit(string ifilename)
 				string possibleIDWire;
 				getline(ss,possibleIDWire,';'); // get up to semicolon
 				if(regex_match(possibleIDWire, ID))	{
-					//wires.push_back(possibleIDWire);
-					//Net netfound(possibleIDWire);
-					Net *netfound = theDesign->add_find_net(possibleIDWire);
+					string wireID = removeWhitespace(possibleIDWire);
+					Net *netfound = theDesign->add_find_net(wireID);
+					LOG("Got wire:");
+					LOG(wireID);
 				}
 								
 				break;
@@ -135,6 +109,7 @@ Design *parseThatShit(string ifilename)
 				parenParser(&currentGatePuts,possiblePorts);
 				// create the gate here
 				if(firsttoken == "and")	{
+					LOG("Found AND gate");
 					Gate *gatefound = theDesign->add_find_gate(AND,gate.at(1), atoi(gate.at(2).c_str()));
 					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
 					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
@@ -143,6 +118,7 @@ Design *parseThatShit(string ifilename)
 					}
 				}
 				else if(firsttoken == "or")	{
+					LOG("Found OR gate");
 					Gate *gatefound = theDesign->add_find_gate(OR,gate.at(1), atoi(gate.at(2).c_str()));
 					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
 					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
@@ -151,6 +127,7 @@ Design *parseThatShit(string ifilename)
 					}
 				}
 				else if(firsttoken == "nand")	{
+					LOG("Found NAND gate");
 					Gate *gatefound = theDesign->add_find_gate(NAND,gate.at(1), atoi(gate.at(2).c_str()));
 					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
 					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
@@ -159,6 +136,7 @@ Design *parseThatShit(string ifilename)
 					}
 				}
 				else if(firsttoken == "mor")	{
+					LOG("Found NOR gate");
 					Gate *gatefound = theDesign->add_find_gate(NOR,gate.at(1), atoi(gate.at(2).c_str()));
 					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
 					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
@@ -167,6 +145,7 @@ Design *parseThatShit(string ifilename)
 					}
 				}
 				else if(firsttoken == "xor")	{
+					LOG("Found XOR gate");
 					Gate *gatefound = theDesign->add_find_gate(XOR,gate.at(1), atoi(gate.at(2).c_str()));
 					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
 					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
@@ -175,6 +154,7 @@ Design *parseThatShit(string ifilename)
 					}
 				}
 				else if(firsttoken == "not")	{
+					LOG("Found NOT gate");
 					Gate *gatefound = theDesign->add_find_gate(NOT,gate.at(1), atoi(gate.at(2).c_str()));
 					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
 					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
@@ -241,17 +221,13 @@ int lineType(string identifier) // going line by line, so decide what kind of li
 
 void parenParser(vector<string>* ports, string input)
 {
+	LOG("Parsing Parentheses");
 	stringstream ss(input);
-	while(!ss.fail()) // runs last time when eof bit is set!
+	while(ss.good()) // runs last time when eof bit is set!
 	{
 		string port;
-		if(ss.eof())	{ // time to grab last num and leave!
-			ss.unget();
-			port = ss.get();
-			ports->push_back(port);
-			break;
-		}
 		getline(ss, port, ',');
+		port = removeWhitespace(port);
 		ports->push_back(port);
 	}
 }
@@ -259,19 +235,56 @@ void parenParser(vector<string>* ports, string input)
 void gateInfo(string type, string info, vector<string> *gate)
 {
 	// looking for type of gate and delay info (if there) and gate name
+	LOG("Getting gate info:");
 	stringstream ss(info);
-	string delay, name;
-	if(ss.peek() == '#')	{  // a gate delay is defined!!
-		ss.seekg(ios::cur + 1);
-		ss >> delay >> name;
+	string delay, name, temp;
+	ss >> temp;
+	temp = removeWhitespace(temp);
+	if(temp[0] == '#')	{  // a gate delay is defined!!
+		ss >> name;
+		temp.erase(temp.begin());
+		delay = temp;
+		type = removeWhitespace(type);
+		name = removeWhitespace(name);
+		LOG(type);
+		LOG(name);
+		LOG(delay);
 		gate->push_back(type);
 		gate->push_back(name);
 		gate->push_back(delay);
 	}
 	else	{
-		ss >> name;
+		type = removeWhitespace(type);
+		name = removeWhitespace(temp);
+		LOG(type);
+		LOG(name);
 		gate->push_back(type);
 		gate->push_back(name);
 		gate->push_back("1");
 	}
+}
+
+bool regex_match(string target, string pattern)
+{
+    int status;
+    regex_t re;
+    	
+    if (regcomp(&re, pattern.c_str(), REG_EXTENDED|REG_NOSUB) != 0) {
+		return false;
+    }
+    status = regexec(&re, target.c_str(), (size_t) 0, NULL, 0);
+    regfree(&re);
+    if (status != 0) {
+        return false;      /* no match */
+    }
+	
+	// Matches
+    return true;
+}
+
+string removeWhitespace(string str)
+{
+	//LOG("Started removing whitespace");
+	str.erase(remove_if(str.begin(), str.end(), ::isspace), str.end());
+	return str;
 }

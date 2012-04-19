@@ -11,14 +11,12 @@ Gate::Gate()
 {
 	inst_name = "default name";
 	delay = 1;
-	output = NULL;
 }
 
 Gate::Gate(string n, int d)
 {
 	inst_name = n;
 	delay = d;
-	output = NULL;
 }
 
 string Gate::name()
@@ -33,12 +31,9 @@ void Gate::addInput(Net *n)
 
 void Gate::addOutput(Net *n)
 {
-  if(output == NULL){
-    output = n;
-  } else {
-    WARN("Output already exists! Overwriting.");
-    output = n;
-  }
+
+	output = n;
+
 }
 
 vector<Net *> * Gate::getInputs()
@@ -71,7 +66,6 @@ And::And()
 {
 	inst_name = "default AND";
 	delay = 1;
-	output = NULL;
 }
 
 And::And(string n, int d)
