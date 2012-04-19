@@ -141,6 +141,7 @@ Design *parseThatShit(string ifilename)
  								throw runtime_error("Syntax error");
  							}
  						}
+						gate.clear();
  					}
  					else if(firsttoken == "or")	{
  						Gate *gatefound = theDesign->add_find_gate(OR,gate.at(1), atoi(gate.at(2).c_str()));
@@ -171,6 +172,7 @@ Design *parseThatShit(string ifilename)
  								throw runtime_error("Syntax error");
  							}
  						}
+						gate.clear();
  					}
  					else if(firsttoken == "nand")	{
  						Gate *gatefound = theDesign->add_find_gate(NAND,gate.at(1), atoi(gate.at(2).c_str()));
@@ -201,6 +203,7 @@ Design *parseThatShit(string ifilename)
  								throw runtime_error("Syntax error");
  							}
  						}
+						gate.clear();
  					}
  					else if(firsttoken == "nor")	{
  						Gate *gatefound = theDesign->add_find_gate(NOR,gate.at(1), atoi(gate.at(2).c_str()));
@@ -231,6 +234,7 @@ Design *parseThatShit(string ifilename)
  								throw runtime_error("Syntax error");
  							}
  						}
+						gate.clear();
  					}
  					else if(firsttoken == "xor")	{
  						Gate *gatefound = theDesign->add_find_gate(XOR,gate.at(1), atoi(gate.at(2).c_str()));
@@ -261,6 +265,7 @@ Design *parseThatShit(string ifilename)
  								throw runtime_error("Syntax error");
  							}
  						}
+						gate.clear();
  					}
  					else if(firsttoken == "not")	{
  						Gate *gatefound = theDesign->add_find_gate(NOT,gate.at(1), atoi(gate.at(2).c_str()));
@@ -291,6 +296,7 @@ Design *parseThatShit(string ifilename)
  								throw runtime_error("Syntax error");
  							}
  						}
+						gate.clear();
  					}
  					else	{
  			      WARN("Unrecognized token");
