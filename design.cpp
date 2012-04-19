@@ -24,6 +24,11 @@ string Design::name()
 	
 }
 
+void Design::make_name(string n)
+{
+	desname = n;
+}
+
 // add an input's name to the list of PIs
 void Design::add_pi(string n)
 {

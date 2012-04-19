@@ -1,3 +1,4 @@
+#include "global.h"
 #include <iostream>
 #include <ostream>
 #include <fstream>
@@ -36,16 +37,16 @@ enum {COMMENT, BLANK, MODULE, INPUT, OUTPUT, WIRE, GATE, END, ERROR};
 
 int lineType(string currentline);
 void parenParser(vector<string> *ports, string input);
-void gateInfo(string type, string info, map<string, vector<string> > *gates);
+void gateInfo(string type, string info, vector<string> *gate);
 
 Design *parseThatShit(string ifilename)
 {
-	string designName;
+	Design *theDesign = new Design;
 	vector<string> port_list;
-	vector<string> inputs;
-	vector<string> outputs;
-	vector<string> wires;
-	map<string, vector<string> > gates;
+	//vector<string> inputs;
+	//vector<string> outputs;
+	//vector<string> wires;
+	vector<string> gate;
 	
 	ifstream ifile(ifilename.c_str(), ifstream::in);
 	while(ifile.good())
@@ -70,7 +71,7 @@ Design *parseThatShit(string ifilename)
 				getline(ss ,possibleIDModule, '(');
 				if(regex_match(possibleIDModule, ID))	{
 					// was an id
-					
+					theDesign->make_name(possibleIDModule);
 				}
 				
 				string possiblePortsModule;
@@ -85,9 +86,11 @@ Design *parseThatShit(string ifilename)
 				string possibleIDInput;
 				getline(ss,possibleIDInput,';'); // get up to semicolon
 				if(regex_match(possibleIDInput, ID))	{
-					inputs.push_back(possibleIDInput); // get id from selection and add it to the list of inputs
+					//inputs.push_back(possibleIDInput); // get id from selection and add it to the list of inputs
+					//Net netfound(possibleIDInput);
+					theDesign->add_pi(possibleIDInput);
+					Net *netfound = theDesign->add_find_net(possibleIDInput);
 				}
-				
 				
 				break;
 			}
@@ -97,7 +100,10 @@ Design *parseThatShit(string ifilename)
 				string possibleIDOutput;
 				getline(ss,possibleIDOutput,';'); // get up to semicolon
 				if(regex_match(possibleIDOutput, ID))	{
-					outputs.push_back(possibleIDOutput);
+					//outputs.push_back(possibleIDOutput);
+					//Net netfound(possibleIDOutput);
+					theDesign->add_po(possibleIDOutput);
+					Net *netfound = theDesign->add_find_net(possibleIDOutput);
 				}
 				
 				break;
@@ -108,7 +114,9 @@ Design *parseThatShit(string ifilename)
 				string possibleIDWire;
 				getline(ss,possibleIDWire,';'); // get up to semicolon
 				if(regex_match(possibleIDWire, ID))	{
-					wires.push_back(possibleIDWire);
+					//wires.push_back(possibleIDWire);
+					//Net netfound(possibleIDWire);
+					Net *netfound = theDesign->add_find_net(possibleIDWire);
 				}
 								
 				break;
@@ -118,14 +126,65 @@ Design *parseThatShit(string ifilename)
 				// gate line
 				string possibleGateInfo;
 				getline(ss,possibleGateInfo,'('); // get up to the port list stuff
-				gateInfo(firsttoken, possibleGateInfo, &gates);
+				gateInfo(firsttoken, possibleGateInfo, &gate);
 				
 				vector<string> currentGatePuts;
+				vector<string>::iterator it;
 				string possiblePorts;
 				getline(ss,possiblePorts, ')');
 				parenParser(&currentGatePuts,possiblePorts);
 				// create the gate here
-				
+				if(firsttoken == "and")	{
+					Gate *gatefound = theDesign->add_find_gate(AND,gate.at(1), atoi(gate.at(2).c_str()));
+					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
+					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
+					{
+						gatefound->addInput(theDesign->find_net(*it));
+					}
+				}
+				else if(firsttoken == "or")	{
+					Gate *gatefound = theDesign->add_find_gate(OR,gate.at(1), atoi(gate.at(2).c_str()));
+					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
+					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
+					{
+						gatefound->addInput(theDesign->find_net(*it));
+					}
+				}
+				else if(firsttoken == "nand")	{
+					Gate *gatefound = theDesign->add_find_gate(NAND,gate.at(1), atoi(gate.at(2).c_str()));
+					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
+					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
+					{
+						gatefound->addInput(theDesign->find_net(*it));
+					}
+				}
+				else if(firsttoken == "mor")	{
+					Gate *gatefound = theDesign->add_find_gate(NOR,gate.at(1), atoi(gate.at(2).c_str()));
+					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
+					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
+					{
+						gatefound->addInput(theDesign->find_net(*it));
+					}
+				}
+				else if(firsttoken == "xor")	{
+					Gate *gatefound = theDesign->add_find_gate(XOR,gate.at(1), atoi(gate.at(2).c_str()));
+					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
+					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
+					{
+						gatefound->addInput(theDesign->find_net(*it));
+					}
+				}
+				else if(firsttoken == "not")	{
+					Gate *gatefound = theDesign->add_find_gate(NOT,gate.at(1), atoi(gate.at(2).c_str()));
+					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
+					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
+					{
+						gatefound->addInput(theDesign->find_net(*it));
+					}
+				}
+				else	{
+					//error
+				}
 				break;
 			}
 			case END :
@@ -140,6 +199,7 @@ Design *parseThatShit(string ifilename)
 			}
 		}
 	}
+	return theDesign;
 }
 
 int lineType(string identifier) // going line by line, so decide what kind of line this is
@@ -196,7 +256,7 @@ void parenParser(vector<string>* ports, string input)
 	}
 }
 
-void gateInfo(string type, string info, map<string, vector<string> > *gates)
+void gateInfo(string type, string info, vector<string> *gate)
 {
 	// looking for type of gate and delay info (if there) and gate name
 	stringstream ss(info);
@@ -204,12 +264,14 @@ void gateInfo(string type, string info, map<string, vector<string> > *gates)
 	if(ss.peek() == '#')	{  // a gate delay is defined!!
 		ss.seekg(ios::cur + 1);
 		ss >> delay >> name;
-		(*gates)[name].push_back(type);
-		(*gates)[name].push_back(delay);
+		gate->push_back(type);
+		gate->push_back(name);
+		gate->push_back(delay);
 	}
 	else	{
 		ss >> name;
-		(*gates)[name].push_back(type);
-		(*gates)[name].push_back("1");
+		gate->push_back(type);
+		gate->push_back(name);
+		gate->push_back("1");
 	}
 }

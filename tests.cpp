@@ -1,7 +1,8 @@
 #include "global.h"
 #include <iostream>
 #include <cassert>
-#include "net.h"
+#include "design.h"
+#include "parser.cpp"
 using namespace std;
 
 void test_design()
