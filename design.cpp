@@ -80,6 +80,7 @@ Net* Design::add_find_net(string n)
 	}
 	else	{ // doesn't exist
 		Net *newNet = new Net(n);
+		design_nets[n] = newNet;
 		return newNet;
 	}
 	
@@ -99,31 +100,37 @@ Gate* Design::add_find_gate(int gtype, string n, int d)
 			case AND	:
 			{
 				And *newGate = new And(n,d);
+				design_gates[n] = newGate;
 				return newGate;
 			}
 			case OR		:
 			{
 				Or *newGate = new Or(n,d);
+				design_gates[n] = newGate;
 				return newGate;
 			}
 			case NAND	:
 			{
 				Nand *newGate = new Nand(n,d);
+				design_gates[n] = newGate;
 				return newGate;
 			}
 			case NOR	:
 			{
 				Nor *newGate = new Nor(n,d);
+				design_gates[n] = newGate;
 				return newGate;
 			}
 			case XOR	:
 			{
 				Xor *newGate = new Xor(n,d);
+				design_gates[n] = newGate;
 				return newGate;
 			}
 			case NOT	:
 			{
 				Not *newGate = new Not(n,d);
+				design_gates[n] = newGate;
 				return newGate;
 			}
 			default		:
@@ -186,7 +193,7 @@ vector<Net *> * Design::get_wire_nets()
 		{
 			for (pi = pis.begin();pi != pis.end();pi++)
 			{
-				if((net->second != *po) && (net->second != *pi))	{
+				if((net->second->name() != *po) && (net->second->name() != *pi))	{
 					wire->push_back(net->second);
 				}
 				else	{
