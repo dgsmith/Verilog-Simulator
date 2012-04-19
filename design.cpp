@@ -257,7 +257,10 @@ void Design::dump(ostream &os)
   
   vector<Gate*> *g = this->all_gates();
   for(vector<Gate*>::iterator it=g->begin(); it!=g->end(); it++) {
-    WARN((*it)->name());
+    os << "\t";
+    (*it)->dump(os);
   }
+  
+  os << "endmodule" << endl;
   
 }

@@ -16,7 +16,7 @@ tests: test_binary
 	./tests
   
 valgrind: gatesim
-	valgrind --tool=memcheck --leak-check=yes ./gatesim
+	valgrind --tool=memcheck --leak-check=yes ./gatesim test.v test.dump.v
 
 clean::
 	$(RM) $(BINARY)

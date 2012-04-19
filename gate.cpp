@@ -113,7 +113,7 @@ void And::dump(ostream &os)
 	
   dumpNetList(os);
   
-  cout << ");" << endl;
+  os << ");" << endl;
 }
 //===================================================================//
 // OR CLASS
@@ -153,7 +153,7 @@ void Or::dump(ostream &os)
   
   dumpNetList(os);
   
-  cout << ");" << endl;
+  os << ");" << endl;
 }
 //===================================================================//
 // NOR CLASS
@@ -193,7 +193,7 @@ void Nor::dump(ostream &os)
   
   dumpNetList(os);
   
-  cout << ");" << endl;
+  os << ");" << endl;
 }
 //===================================================================//
 // NAND CLASS
@@ -233,7 +233,7 @@ void Nand::dump(ostream &os)
   
   dumpNetList(os);
   
-  cout << ");" << endl;
+  os << ");" << endl;
 }
 //===================================================================//
 // XOR CLASS
@@ -273,7 +273,7 @@ void Xor::dump(ostream &os)
   
   dumpNetList(os);
   
-  cout << ");" << endl;
+  os << ");" << endl;
 }
 //===================================================================//
 // NOT CLASS
@@ -313,5 +313,5 @@ void Not::dump(ostream &os)
   
   dumpNetList(os);
   
-  cout << ");" << endl;
+  os << ");" << endl;
 }
