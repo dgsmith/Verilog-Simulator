@@ -10,9 +10,12 @@ Design *parseThatShit(string ifilename)
 	//vector<string> wires;
 	vector<string> gate;
 	
+  unsigned int lineNum = 0;
 	ifstream ifile(ifilename.c_str(), ifstream::in);
 	while(ifile.good())
 	{
+    lineNum++;
+    
 		string currentline;
 		getline(ifile, currentline);
 		stringstream ss(currentline);
