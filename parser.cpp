@@ -157,18 +157,20 @@ Design *parseThatShit(string ifilename)
 					}
 				}
 				else	{
-					//error
+          WARN("Unrecognized token");
 				}
 				break;
 			}
 			case END :
 			{
 				// done!
+        LOG("Done!");
 				break;
 			}
 			case ERROR :
 			{
 				// error...
+        ERROR("Error...");
 				break;
 			}
 		}

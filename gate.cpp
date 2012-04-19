@@ -56,6 +56,17 @@ int Gate::getDelay()
 	return delay;
 }
 
+void Gate::dumpNetList(ostream& os)
+{
+  os << "(" << output->name() << ", ";
+  for(vector<Net*>::iterator i=inputs->begin(); i!=inputs->end(); i++)
+  {
+    os << (*i)->name();
+    if(i+1 != inputs->end())
+      os << ", ";
+  }
+}
+
 //===================================================================//
 // AND CLASS
 //
@@ -85,18 +96,9 @@ char And::eval()
 
 void And::dump(ostream &os)
 {
-  LOG("Dump");
-  os << "and #" << delay << " ";// << inst_name;// << "(" << output->name() << ", ";
-  LOG("WHY");
+  os << "and #" << delay << " " << inst_name;
   
-  for(vector<Net*>::iterator i=inputs->begin(); i!=inputs->end(); i++)
-  {
-    // LOG(*i);
-    // os << (*i)->name();
-    // if(i+1 != inputs->end())
-    //   os << ",";
-  }
-  LOG("Ok");
+  dumpNetList(os);
   
   cout << ");" << endl;
 }
@@ -129,7 +131,11 @@ char Or::eval()
 
 void Or::dump(ostream &os)
 {
-	
+  os << "or #" << delay << " " << inst_name;
+  
+  dumpNetList(os);
+  
+  cout << ");" << endl;
 }
 //===================================================================//
 // NOR CLASS
@@ -160,7 +166,11 @@ char Nor::eval()
 
 void Nor::dump(ostream &os)
 {
-	
+  os << "nor #" << delay << " " << inst_name;
+  
+  dumpNetList(os);
+  
+  cout << ");" << endl;
 }
 //===================================================================//
 // NAND CLASS
@@ -191,7 +201,11 @@ char Nand::eval()
 
 void Nand::dump(ostream &os)
 {
-	
+  os << "nand #" << delay << " " << inst_name;
+  
+  dumpNetList(os);
+  
+  cout << ");" << endl;
 }
 //===================================================================//
 // XOR CLASS
@@ -222,7 +236,11 @@ char Xor::eval()
 
 void Xor::dump(ostream &os)
 {
-	
+  os << "xor #" << delay << " " << inst_name;
+  
+  dumpNetList(os);
+  
+  cout << ");" << endl;
 }
 //===================================================================//
 // NOT CLASS
@@ -253,5 +271,9 @@ char Not::eval()
 
 void Not::dump(ostream &os)
 {
-	
+  os << "not #" << delay << " " << inst_name;
+  
+  dumpNetList(os);
+  
+  cout << ");" << endl;
 }
