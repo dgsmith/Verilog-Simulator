@@ -236,9 +236,20 @@ vector<Gate *> * Design::all_gates()
 // write out the design in Verilog format to the provided ostream
 void Design::dump(ostream &os)
 {
-  os << "module " << this->name() << "();" << endl;
-  
+  os << "module " << this->name() << "(";
   vector<Net*> *v = this->get_pi_nets();
+  for(vector<Net*>::iterator it=v->begin(); it!=v->end(); it++) {
+    os << (*it)->name() << ", ";
+  }
+  v = this->get_po_nets();
+  for(vector<Net*>::iterator it=v->begin(); it!=v->end(); it++) {
+    os << (*it)->name();
+    if(it+1 != v->end()) os << ", ";
+  }
+  
+  os << ");" << endl;
+  
+  v = this->get_pi_nets();
   for(vector<Net*>::iterator it=v->begin(); it!=v->end(); it++) {
     os << "\tinput " << (*it)->name() << ";" << endl;
   }
