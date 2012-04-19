@@ -85,7 +85,20 @@ char And::eval()
 
 void And::dump(ostream &os)
 {
-	
+  LOG("Dump");
+  os << "and #" << delay << " ";// << inst_name;// << "(" << output->name() << ", ";
+  LOG("WHY");
+  
+  for(vector<Net*>::iterator i=inputs->begin(); i!=inputs->end(); i++)
+  {
+    // LOG(*i);
+    // os << (*i)->name();
+    // if(i+1 != inputs->end())
+    //   os << ",";
+  }
+  LOG("Ok");
+  
+  cout << ");" << endl;
 }
 //===================================================================//
 // OR CLASS
