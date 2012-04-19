@@ -1,9 +1,10 @@
 #include "design.h"
+#include <stdexcept>
 using namespace std;
 
 Design::Design()
 {
-	desname = "default name";
+	desname = "design";
 	
 }
 
@@ -21,7 +22,7 @@ Design::~Design()
 // returns name of device
 string Design::name()
 {
-	
+	return desname;
 }
 
 void Design::make_name(string n)
@@ -44,13 +45,27 @@ void Design::add_po(string n)
 // returns NULL or pointer to net object
 Net* Design::find_net(string net_name)
 {
-	
+	map<string, Net*>::iterator it;
+	it = design_nets.find(net_name);
+	if(it == design_nets.end())	{ // not found :/
+		throw range_error("Net not found :(");
+	}
+	else	{ // found :D
+		return it->second;
+	}
 }
 
 // same as find_net, but with gates
 Gate* Design::find_gate(string inst_name)
 {
-	
+	map<string, Gate*>::iterator it;
+	it = design_gates.find(inst_name);
+	if(it == design_gates.end())	{ // not found :/
+		throw range_error("Gate not found :(");
+	}
+	else	{ // found :D
+		return it->second;
+	}
 }
 
 // returns a pointer to the Net object with the given name

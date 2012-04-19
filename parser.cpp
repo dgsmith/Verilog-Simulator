@@ -109,7 +109,6 @@ Design *parseThatShit(string ifilename)
 				parenParser(&currentGatePuts,possiblePorts);
 				// create the gate here
 				if(firsttoken == "and")	{
-					LOG("Found AND gate");
 					Gate *gatefound = theDesign->add_find_gate(AND,gate.at(1), atoi(gate.at(2).c_str()));
 					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
 					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
@@ -118,7 +117,6 @@ Design *parseThatShit(string ifilename)
 					}
 				}
 				else if(firsttoken == "or")	{
-					LOG("Found OR gate");
 					Gate *gatefound = theDesign->add_find_gate(OR,gate.at(1), atoi(gate.at(2).c_str()));
 					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
 					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
@@ -127,7 +125,6 @@ Design *parseThatShit(string ifilename)
 					}
 				}
 				else if(firsttoken == "nand")	{
-					LOG("Found NAND gate");
 					Gate *gatefound = theDesign->add_find_gate(NAND,gate.at(1), atoi(gate.at(2).c_str()));
 					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
 					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
@@ -136,7 +133,6 @@ Design *parseThatShit(string ifilename)
 					}
 				}
 				else if(firsttoken == "nor")	{
-					LOG("Found NOR gate");
 					Gate *gatefound = theDesign->add_find_gate(NOR,gate.at(1), atoi(gate.at(2).c_str()));
 					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
 					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
@@ -145,7 +141,6 @@ Design *parseThatShit(string ifilename)
 					}
 				}
 				else if(firsttoken == "xor")	{
-					LOG("Found XOR gate");
 					Gate *gatefound = theDesign->add_find_gate(XOR,gate.at(1), atoi(gate.at(2).c_str()));
 					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
 					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
@@ -154,7 +149,6 @@ Design *parseThatShit(string ifilename)
 					}
 				}
 				else if(firsttoken == "not")	{
-					LOG("Found NOT gate");
 					Gate *gatefound = theDesign->add_find_gate(NOT,gate.at(1), atoi(gate.at(2).c_str()));
 					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
 					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
