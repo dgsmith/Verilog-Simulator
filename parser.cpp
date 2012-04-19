@@ -135,7 +135,7 @@ Design *parseThatShit(string ifilename)
 						gatefound->addInput(theDesign->find_net(*it));
 					}
 				}
-				else if(firsttoken == "mor")	{
+				else if(firsttoken == "nor")	{
 					LOG("Found NOR gate");
 					Gate *gatefound = theDesign->add_find_gate(NOR,gate.at(1), atoi(gate.at(2).c_str()));
 					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
@@ -163,18 +163,20 @@ Design *parseThatShit(string ifilename)
 					}
 				}
 				else	{
-					//error
+          WARN("Unrecognized token");
 				}
 				break;
 			}
 			case END :
 			{
 				// done!
+        LOG("Done!");
 				break;
 			}
 			case ERROR :
 			{
 				// error...
+        ERROR("Error...");
 				break;
 			}
 		}
