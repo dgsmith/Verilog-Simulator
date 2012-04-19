@@ -19,7 +19,7 @@ enum {COMMENT, BLANK, MODULE, INPUT, OUTPUT, WIRE, GATE, END, ERROR};
 int lineType(string currentline);
 string getID(string characters);
 void parenParser(vector<string> *ports, string input);
-void gateInfo(string name, string info, map<string, vector<string> > *gates);
+void gateInfo(string type, string info, map<string, vector<string> > *gates);
 
 Design *parseThatShit(string ifilename)
 {
@@ -42,61 +42,75 @@ Design *parseThatShit(string ifilename)
 		{
 			case COMMENT :
 				// comment line
-				continue;
+				break;
 			case BLANK :
 				
-				continue;
+				break;
 			case MODULE :
+			{
 				// line defining a module
-				string possibleID;
-				getline(ss ,possibleID, '(');
-				designName = getID(possibleID); // get name 
+				string possibleIDModule;
+				getline(ss ,possibleIDModule, '(');
+				designName = getID(possibleIDModule); // get name 
 				
-				string possiblePorts;
-				getline(ss, possiblePorts, ')');
-				parenParser(&port_list, possiblePorts);
+				string possiblePortsModule;
+				getline(ss, possiblePortsModule, ')');
+				parenParser(&port_list, possiblePortsModule);
 				
-				continue;
+				break;
+			}
 			case INPUT :
+			{
 				// input line
-				string possibleID;
-				getline(ss,possibleID,';'); // get up to semicolon
-				inputs.push_back(getID(possibleID)); // get id from selection and add it to the list of inputs
+				string possibleIDInput;
+				getline(ss,possibleIDInput,';'); // get up to semicolon
+				inputs.push_back(getID(possibleIDInput)); // get id from selection and add it to the list of inputs
 				
-				continue;
+				break;
+			}
 			case OUTPUT :
+			{
 				// output line
-				string possibleID;
-				getline(ss,possibleID,';'); // get up to semicolon
-				outputs.push_back(getID(possibleID)); // get id from selection and add it to the list of outputs
+				string possibleIDOutput;
+				getline(ss,possibleIDOutput,';'); // get up to semicolon
+				outputs.push_back(getID(possibleIDOutput)); // get id from selection and add it to the list of outputs
 				
-				continue;
+				break;
+			}
 			case WIRE :
+			{
 				// wire line
-				string possibleID;
-				getline(ss,possibleID,';'); // get up to semicolon
-				wires.push_back(getID(possibleID)); // get id from selection and add it to the list of wires
+				string possibleIDWire;
+				getline(ss,possibleIDWire,';'); // get up to semicolon
+				wires.push_back(getID(possibleIDWire)); // get id from selection and add it to the list of wires
 				
-				continue;
+				break;
+			}
 			case GATE :
+			{
 				// gate line
-				string gateInfo;
-				getline(ss,gateInfo,'(') // get up to the port list stuff
-				gateInfo(firsttoken, gateInfo, gates);
+				string possibleGateInfo;
+				getline(ss,possibleGateInfo,'('); // get up to the port list stuff
+				gateInfo(firsttoken, possibleGateInfo, &gates);
 				
 				vector<string> currentGatePuts;
 				string possiblePorts;
 				getline(ss,possiblePorts, ')');
-				parentParser(&currentGatePuts,possiblePorts);
+				parenParser(&currentGatePuts,possiblePorts);
 				// create the gate here
 				
-				continue;
+				break;
+			}
 			case END :
+			{
 				// done!
-				continue;
+				break;
+			}
 			case ERROR :
+			{
 				// error...
-				continue;
+				break;
+			}
 		}
 	}
 }
@@ -151,29 +165,32 @@ void parenParser(vector<string>* ports, string input)
 	stringstream ss(input);
 	while(!ss.fail()) // runs last time when eof bit is set!
 	{
+		string port;
 		if(ss.eof())	{ // time to grab last num and leave!
 			ss.unget();
-			ports.push_back(ss.get());
+			port = ss.get();
+			ports->push_back(port);
 			break;
 		}
-		string port;
-		getline(ss, port, ",");
-		ports.push_back(port);
+		getline(ss, port, ',');
+		ports->push_back(port);
 	}
 }
 
-void gateInfo(string type, string info, map<string, vector<string>> *gates)
+void gateInfo(string type, string info, map<string, vector<string> > *gates)
 {
 	// looking for type of gate and delay info (if there) and gate name
 	stringstream ss(info);
+	string delay, name;
 	if(ss.peek() == '#')	{  // a gate delay is defined!!
 		ss.seekg(ios::cur + 1);
-		string delay, name;
 		ss >> delay >> name;
-		gates[name] = {type, delay};
+		(*gates)[name].push_back(type);
+		(*gates)[name].push_back(delay);
 	}
 	else	{
 		ss >> name;
-		gates[name] = {type, '1'};
+		(*gates)[name].push_back(type);
+		(*gates)[name].push_back("1");
 	}
 }
