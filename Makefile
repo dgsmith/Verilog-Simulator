@@ -14,6 +14,9 @@ test_binary: $(OBJECTS) tests.cpp
 
 tests: test_binary
 	./tests
+  
+valgrind: gatesim
+	valgrind --tool=memcheck --leak-check=yes ./gatesim
 
 clean::
 	$(RM) $(BINARY)
