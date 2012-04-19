@@ -21,299 +21,304 @@ Design *parseThatShit(string ifilename)
 		stringstream ss(currentline);
 		string firsttoken;
 		ss >> firsttoken;
-		switch(lineType(firsttoken))
-		{
-			case COMMENT :
-				// comment line
-				LOG("Comment line found");
-				break;
-			case BLANK :
-				LOG("Blank line found");
-				break;
-			case MODULE :
-			{
-				// line defining a module
-				LOG("Module line");
-				string possibleIDModule;
-				getline(ss ,possibleIDModule, '(');
-				if(regex_match(possibleIDModule, ID))	{
-					// was an id
-					string designName = removeWhitespace(possibleIDModule);
-					theDesign->make_name(designName);
-					LOG("Module ID was ID:");
-					LOG(designName);
-				}
-				
-				string possiblePortsModule;
-				getline(ss, possiblePortsModule, ')');
-				parenParser(&port_list, possiblePortsModule);
-				LOG("Module port list:");
-				for(it=port_list.begin();it < port_list.end(); it++)
-				{
-					LOG(*it);
-				}
-				break;
+		try{
+			switch(lineType(firsttoken))
+ 			{
+ 				case COMMENT :
+ 					// comment line
+ 					LOG("Comment line found");
+ 					break;
+ 				case BLANK :
+ 					LOG("Blank line found");
+ 					break;
+ 				case MODULE :
+ 				{
+ 					// line defining a module
+ 					LOG("Module line");
+ 					string possibleIDModule;
+ 					getline(ss ,possibleIDModule, '(');
+ 					if(regex_match(possibleIDModule, ID))	{
+ 						// was an id
+ 						string designName = removeWhitespace(possibleIDModule);
+ 						theDesign->make_name(designName);
+ 						LOG("Module ID:");
+ 						LOG(designName);
+ 					}
+ 					
+ 					string possiblePortsModule;
+ 					getline(ss, possiblePortsModule, ')');
+ 					parenParser(&port_list, possiblePortsModule);
+ 					LOG("Module port list:");
+ 					for(it=port_list.begin();it < port_list.end(); it++)
+ 					{
+ 						LOG(*it);
+ 					}
+ 					break;
+ 				}
+ 				case INPUT :
+ 				{
+ 					// input line
+ 					string possibleIDInput;
+ 					getline(ss,possibleIDInput,';'); // get up to semicolon
+ 					if(regex_match(possibleIDInput, ID))	{
+ 						string inputID = removeWhitespace(possibleIDInput);
+ 						theDesign->add_pi(inputID);
+ 						Net *netfound = theDesign->add_find_net(inputID);
+ 						LOG("Got input:");
+ 						LOG(inputID);
+ 					}
+ 					
+ 					break;
+ 				}
+ 				case OUTPUT :
+ 				{
+ 					// output line
+ 					string possibleIDOutput;
+ 					getline(ss,possibleIDOutput,';'); // get up to semicolon
+ 					if(regex_match(possibleIDOutput, ID))	{
+ 						string outputID = removeWhitespace(possibleIDOutput);
+ 						theDesign->add_po(outputID);
+ 						Net *netfound = theDesign->add_find_net(outputID);
+ 						LOG("Got output:");
+ 						LOG(outputID);
+ 					}
+ 					
+ 					break;
+ 				}
+ 				case WIRE :
+ 				{
+ 					// wire line
+ 					string possibleIDWire;
+ 					getline(ss,possibleIDWire,';'); // get up to semicolon
+ 					if(regex_match(possibleIDWire, ID))	{
+ 						string wireID = removeWhitespace(possibleIDWire);
+ 						Net *netfound = theDesign->add_find_net(wireID);
+ 						LOG("Got wire:");
+ 						LOG(wireID);
+ 					}
+ 									
+ 					break;
+ 				}
+ 				case GATE :
+ 				{
+ 					// gate line
+ 					string possibleGateInfo;
+ 					getline(ss,possibleGateInfo,'('); // get up to the port list stuff
+ 					gateInfo(firsttoken, possibleGateInfo, &gate);
+ 					
+ 					vector<string> currentGatePuts;
+ 					vector<string>::iterator it;
+ 					string possiblePorts;
+ 					getline(ss,possiblePorts, ')');
+ 					parenParser(&currentGatePuts,possiblePorts);
+ 					// create the gate here
+ 					if(firsttoken == "and")	{
+ 						Gate *gatefound = theDesign->add_find_gate(AND,gate.at(1), atoi(gate.at(2).c_str()));
+ 						try	{
+ 							gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+ 							LOG("output:");
+ 							LOG(currentGatePuts.front());
+ 						} catch(range_error &ex)	{
+ 							string out;
+ 							stringstream ss;
+ 							ss << lineNum;
+ 							out = ss.str();
+ 							ERROR("On line " << out << " " << ex.what());
+ 							throw runtime_error("Syntax error");
+ 						}
+ 						LOG("inputs:");
+ 						for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
+ 						{
+ 							LOG(*it);
+ 							try	{
+ 								gatefound->addInput(theDesign->find_net(*it));
+ 							} catch(range_error &ex)	{
+ 								string out;
+ 								stringstream ss;
+ 								ss << lineNum;
+ 								out = ss.str();
+ 								ERROR("On line " << out << " " << ex.what());
+ 								throw runtime_error("Syntax error");
+ 							}
+ 						}
+ 					}
+ 					else if(firsttoken == "or")	{
+ 						Gate *gatefound = theDesign->add_find_gate(OR,gate.at(1), atoi(gate.at(2).c_str()));
+ 						try	{
+ 							gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+ 							LOG("output:");
+ 							LOG(currentGatePuts.front());
+ 						} catch(range_error &ex)	{
+ 							string out;
+ 							stringstream ss;
+ 							ss << lineNum;
+ 							out = ss.str();
+ 							ERROR("On line " << out << " " << ex.what());
+ 							throw runtime_error("Syntax error");
+ 						}
+ 						LOG("inputs:");
+ 						for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
+ 						{
+ 							LOG(*it);
+ 							try	{
+ 								gatefound->addInput(theDesign->find_net(*it));
+ 							} catch(range_error &ex)	{
+ 								string out;
+ 								stringstream ss;
+ 								ss << lineNum;
+ 								out = ss.str();
+ 								ERROR("On line " << out << " " << ex.what());
+ 								throw runtime_error("Syntax error");
+ 							}
+ 						}
+ 					}
+ 					else if(firsttoken == "nand")	{
+ 						Gate *gatefound = theDesign->add_find_gate(NAND,gate.at(1), atoi(gate.at(2).c_str()));
+ 						try	{
+ 							gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+ 							LOG("output:");
+ 							LOG(currentGatePuts.front());
+ 						} catch(range_error &ex)	{
+ 							string out;
+ 							stringstream ss;
+ 							ss << lineNum;
+ 							out = ss.str();
+ 							ERROR("On line " << out << " " << ex.what());
+ 							throw runtime_error("Syntax error");
+ 						}
+ 						LOG("inputs:");
+ 						for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
+ 						{
+ 							LOG(*it);
+ 							try	{
+ 								gatefound->addInput(theDesign->find_net(*it));
+ 							} catch(range_error &ex)	{
+ 								string out;
+ 								stringstream ss;
+ 								ss << lineNum;
+ 								out = ss.str();
+ 								ERROR("On line " << out << " " << ex.what());
+ 								throw runtime_error("Syntax error");
+ 							}
+ 						}
+ 					}
+ 					else if(firsttoken == "nor")	{
+ 						Gate *gatefound = theDesign->add_find_gate(NOR,gate.at(1), atoi(gate.at(2).c_str()));
+ 						try	{
+ 							gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+ 							LOG("output:");
+ 							LOG(currentGatePuts.front());
+ 						} catch(range_error &ex)	{
+ 							string out;
+ 							stringstream ss;
+ 							ss << lineNum;
+ 							out = ss.str();
+ 							ERROR("On line " << out << " " << ex.what());
+ 							throw runtime_error("Syntax error");
+ 						}
+ 						LOG("inputs:");
+ 						for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
+ 						{
+ 							LOG(*it);
+ 							try	{
+ 								gatefound->addInput(theDesign->find_net(*it));
+ 							} catch(range_error &ex)	{
+ 								string out;
+ 								stringstream ss;
+ 								ss << lineNum;
+ 								out = ss.str();
+ 								ERROR("On line " << out << " " << ex.what());
+ 								throw runtime_error("Syntax error");
+ 							}
+ 						}
+ 					}
+ 					else if(firsttoken == "xor")	{
+ 						Gate *gatefound = theDesign->add_find_gate(XOR,gate.at(1), atoi(gate.at(2).c_str()));
+ 						try	{
+ 							gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+ 							LOG("output:");
+ 							LOG(currentGatePuts.front());
+ 						} catch(range_error &ex)	{
+ 							string out;
+ 							stringstream ss;
+ 							ss << lineNum;
+ 							out = ss.str();
+ 							ERROR("On line " << out << " " << ex.what());
+ 							throw runtime_error("Syntax error");
+ 						}
+ 						LOG("inputs:");
+ 						for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
+ 						{
+ 							LOG(*it);
+ 							try	{
+ 								gatefound->addInput(theDesign->find_net(*it));
+ 							} catch(range_error &ex)	{
+ 								string out;
+ 								stringstream ss;
+ 								ss << lineNum;
+ 								out = ss.str();
+ 								ERROR("On line " << out << " " << ex.what());
+ 								throw runtime_error("Syntax error");
+ 							}
+ 						}
+ 					}
+ 					else if(firsttoken == "not")	{
+ 						Gate *gatefound = theDesign->add_find_gate(NOT,gate.at(1), atoi(gate.at(2).c_str()));
+ 						try	{
+ 							gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+ 							LOG("output:");
+ 							LOG(currentGatePuts.front());
+ 						} catch(range_error &ex)	{
+ 							string out;
+ 							stringstream ss;
+ 							ss << lineNum;
+ 							out = ss.str();
+ 							ERROR("On line " << out << " " << ex.what());
+ 							throw runtime_error("Syntax error");
+ 						}
+ 						LOG("inputs:");
+ 						for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
+ 						{
+ 							LOG(*it);
+ 							try	{
+ 								gatefound->addInput(theDesign->find_net(*it));
+ 							} catch(range_error &ex)	{
+ 								string out;
+ 								stringstream ss;
+ 								ss << lineNum;
+ 								out = ss.str();
+ 								ERROR("On line " << out << " " << ex.what());
+ 								throw runtime_error("Syntax error");
+ 							}
+ 						}
+ 					}
+ 					else	{
+ 			      WARN("Unrecognized token");
+ 					}
+ 					break;
+ 				}
+ 				case END :
+ 				{
+ 					// done!
+ 			    LOG("Done!");
+ 					break;
+ 				}
+ 				case ERROR :
+ 				{
+ 					// error...
+ 					string out;
+ 					stringstream ss;
+ 					ss << lineNum;
+ 					out = ss.str();
+ 			    ERROR("Line read error on line " << out);
+ 					break;
+ 				}
 			}
-			case INPUT :
-			{
-				// input line
-				string possibleIDInput;
-				getline(ss,possibleIDInput,';'); // get up to semicolon
-				if(regex_match(possibleIDInput, ID))	{
-					string inputID = removeWhitespace(possibleIDInput);
-					theDesign->add_pi(inputID);
-					Net *netfound = theDesign->add_find_net(inputID);
-					LOG("Got input:");
-					LOG(inputID);
-				}
-				
-				break;
-			}
-			case OUTPUT :
-			{
-				// output line
-				string possibleIDOutput;
-				getline(ss,possibleIDOutput,';'); // get up to semicolon
-				if(regex_match(possibleIDOutput, ID))	{
-					string outputID = removeWhitespace(possibleIDOutput);
-					theDesign->add_po(outputID);
-					Net *netfound = theDesign->add_find_net(outputID);
-					LOG("Got output:");
-					LOG(outputID);
-				}
-				
-				break;
-			}
-			case WIRE :
-			{
-				// wire line
-				string possibleIDWire;
-				getline(ss,possibleIDWire,';'); // get up to semicolon
-				if(regex_match(possibleIDWire, ID))	{
-					string wireID = removeWhitespace(possibleIDWire);
-					Net *netfound = theDesign->add_find_net(wireID);
-					LOG("Got wire:");
-					LOG(wireID);
-				}
-								
-				break;
-			}
-			case GATE :
-			{
-				// gate line
-				string possibleGateInfo;
-				getline(ss,possibleGateInfo,'('); // get up to the port list stuff
-				gateInfo(firsttoken, possibleGateInfo, &gate);
-				
-				vector<string> currentGatePuts;
-				vector<string>::iterator it;
-				string possiblePorts;
-				getline(ss,possiblePorts, ')');
-				parenParser(&currentGatePuts,possiblePorts);
-				// create the gate here
-				if(firsttoken == "and")	{
-					Gate *gatefound = theDesign->add_find_gate(AND,gate.at(1), atoi(gate.at(2).c_str()));
-					try	{
-						gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
-						LOG("output:");
-						LOG(currentGatePuts.front());
-					} catch(range_error &ex)	{
-						string out;
-						stringstream ss;
-						ss << lineNum;
-						out = ss.str();
-						ERROR("On line " << out << " " << ex.what());
-						throw runtime_error("Net not found :(");
-					}
-					LOG("inputs:");
-					for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
-					{
-						LOG(*it);
-						try	{
-							gatefound->addInput(theDesign->find_net(*it));
-						} catch(range_error &ex)	{
-							string out;
-							stringstream ss;
-							ss << lineNum;
-							out = ss.str();
-							ERROR("On line " << out << " " << ex.what());
-							throw runtime_error("Net not found :(");
-						}
-					}
-				}
-				else if(firsttoken == "or")	{
-					Gate *gatefound = theDesign->add_find_gate(OR,gate.at(1), atoi(gate.at(2).c_str()));
-					try	{
-						gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
-						LOG("output:");
-						LOG(currentGatePuts.front());
-					} catch(range_error &ex)	{
-						string out;
-						stringstream ss;
-						ss << lineNum;
-						out = ss.str();
-						ERROR("On line " << out << " " << ex.what());
-						throw runtime_error("Net not found :(");
-					}
-					LOG("inputs:");
-					for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
-					{
-						LOG(*it);
-						try	{
-							gatefound->addInput(theDesign->find_net(*it));
-						} catch(range_error &ex)	{
-							string out;
-							stringstream ss;
-							ss << lineNum;
-							out = ss.str();
-							ERROR("On line " << out << " " << ex.what());
-							throw runtime_error("Net not found :(");
-						}
-					}
-				}
-				else if(firsttoken == "nand")	{
-					Gate *gatefound = theDesign->add_find_gate(NAND,gate.at(1), atoi(gate.at(2).c_str()));
-					try	{
-						gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
-						LOG("output:");
-						LOG(currentGatePuts.front());
-					} catch(range_error &ex)	{
-						string out;
-						stringstream ss;
-						ss << lineNum;
-						out = ss.str();
-						ERROR("On line " << out << " " << ex.what());
-						throw runtime_error("Net not found :(");
-					}
-					LOG("inputs:");
-					for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
-					{
-						LOG(*it);
-						try	{
-							gatefound->addInput(theDesign->find_net(*it));
-						} catch(range_error &ex)	{
-							string out;
-							stringstream ss;
-							ss << lineNum;
-							out = ss.str();
-							ERROR("On line " << out << " " << ex.what());
-							throw runtime_error("Net not found :(");
-						}
-					}
-				}
-				else if(firsttoken == "nor")	{
-					Gate *gatefound = theDesign->add_find_gate(NOR,gate.at(1), atoi(gate.at(2).c_str()));
-					try	{
-						gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
-						LOG("output:");
-						LOG(currentGatePuts.front());
-					} catch(range_error &ex)	{
-						string out;
-						stringstream ss;
-						ss << lineNum;
-						out = ss.str();
-						ERROR("On line " << out << " " << ex.what());
-						throw runtime_error("Net not found :(");
-					}
-					LOG("inputs:");
-					for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
-					{
-						LOG(*it);
-						try	{
-							gatefound->addInput(theDesign->find_net(*it));
-						} catch(range_error &ex)	{
-							string out;
-							stringstream ss;
-							ss << lineNum;
-							out = ss.str();
-							ERROR("On line " << out << " " << ex.what());
-							throw runtime_error("Net not found :(");
-						}
-					}
-				}
-				else if(firsttoken == "xor")	{
-					Gate *gatefound = theDesign->add_find_gate(XOR,gate.at(1), atoi(gate.at(2).c_str()));
-					try	{
-						gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
-						LOG("output:");
-						LOG(currentGatePuts.front());
-					} catch(range_error &ex)	{
-						string out;
-						stringstream ss;
-						ss << lineNum;
-						out = ss.str();
-						ERROR("On line " << out << " " << ex.what());
-						throw runtime_error("Net not found :(");
-					}
-					LOG("inputs:");
-					for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
-					{
-						LOG(*it);
-						try	{
-							gatefound->addInput(theDesign->find_net(*it));
-						} catch(range_error &ex)	{
-							string out;
-							stringstream ss;
-							ss << lineNum;
-							out = ss.str();
-							ERROR("On line " << out << " " << ex.what());
-							throw runtime_error("Net not found :(");
-						}
-					}
-				}
-				else if(firsttoken == "not")	{
-					Gate *gatefound = theDesign->add_find_gate(NOT,gate.at(1), atoi(gate.at(2).c_str()));
-					try	{
-						gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
-						LOG("output:");
-						LOG(currentGatePuts.front());
-					} catch(range_error &ex)	{
-						string out;
-						stringstream ss;
-						ss << lineNum;
-						out = ss.str();
-						ERROR("On line " << out << " " << ex.what());
-						throw runtime_error("Net not found :(");
-					}
-					LOG("inputs:");
-					for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
-					{
-						LOG(*it);
-						try	{
-							gatefound->addInput(theDesign->find_net(*it));
-						} catch(range_error &ex)	{
-							string out;
-							stringstream ss;
-							ss << lineNum;
-							out = ss.str();
-							ERROR("On line " << out << " " << ex.what());
-							throw runtime_error("Net not found :(");
-						}
-					}
-				}
-				else	{
-          WARN("Unrecognized token");
-				}
-				break;
-			}
-			case END :
-			{
-				// done!
-        LOG("Done!");
-				break;
-			}
-			case ERROR :
-			{
-				// error...
-				string out;
-				stringstream ss;
-				ss << lineNum;
-				out = ss.str();
-        ERROR("Line read error on line " << out);
-				break;
-			}
+		} catch(runtime_error &ex)	{
+			ERROR(ex.what());
 		}
 	}
+	ifile.close();
 	return theDesign;
 }
 
@@ -398,7 +403,7 @@ void gateInfo(string type, string info, vector<string> *gate)
 		LOG(name);
 		gate->push_back(type);
 		gate->push_back(name);
-		gate->push_back("1");
+		gate->push_back("0");
 	}
 }
 

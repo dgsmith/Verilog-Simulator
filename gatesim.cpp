@@ -5,6 +5,7 @@
 #include "global.h"
 #include <iostream>
 #include <fstream>
+#include <string>
 #include "parser.h"
 
 using namespace std;
@@ -13,20 +14,28 @@ void dumpToFile(string filename, Design* aDesign)
 {
   ofstream outfile(filename.c_str());
   outfile << "// Dumped from " << filename << endl;
-  aDesign->dump(outfile);  
+  aDesign->dump(outfile); 
+  
   outfile.close();
 }
 
 int main (int argc, char const *argv[])
 {
-  LOG("Parsing and dumping test.v");
+  if (argc <= 2)
+		{
+	 		cout << "Usage: " << argv[0] << " <Input Filename>  <Output Filename>" << endl;
+	   	exit(1);
+	  }
+	string ifile = argv[1];
+	string ofile = argv[2];
+	
 	Design *a;
-	a = parseThatShit("test.v");
-  dumpToFile("test.dump.v", a);
-  
-  LOG("Parsing and dumping test2.v");
-  a = parseThatShit("test2.v");
-  dumpToFile("test2.dump.v", a);
+	try{
+		a = parseThatShit(ifile);
+	} catch(runtime_error &ex)	{
+		ERROR(ex.what());
+	}
+	dumpToFile(ofile, a);
   
   return 0;
 }
