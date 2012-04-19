@@ -10,6 +10,24 @@
 
 using namespace std;
 
+bool regex_match(string target, string pattern)
+{
+    int status;
+    regex_t re;
+    	
+    if (regcomp(&re, pattern.c_str(), REG_EXTENDED|REG_NOSUB) != 0) {
+		return false;
+    }
+    status = regexec(&re, target.c_str(), (size_t) 0, NULL, 0);
+    regfree(&re);
+    if (status != 0) {
+        return false;      /* no match */
+    }
+	
+	// Matches
+    return true;
+}
+
 enum {COMMENT, BLANK, MODULE, INPUT, OUTPUT, WIRE, GATE, END, ERROR};
 	
 #define ID "[A-Za-z_][A-Za-z0-9_]*"
