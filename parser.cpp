@@ -110,49 +110,61 @@ Design *parseThatShit(string ifilename)
 				// create the gate here
 				if(firsttoken == "and")	{
 					Gate *gatefound = theDesign->add_find_gate(AND,gate.at(1), atoi(gate.at(2).c_str()));
-					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
-					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
+					gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+					for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
 					{
+						LOG("inputs:");
+						LOG(*it);
 						gatefound->addInput(theDesign->find_net(*it));
 					}
 				}
 				else if(firsttoken == "or")	{
 					Gate *gatefound = theDesign->add_find_gate(OR,gate.at(1), atoi(gate.at(2).c_str()));
-					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
-					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
+					gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+					for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
 					{
+						LOG("inputs:");
+						LOG(*it);
 						gatefound->addInput(theDesign->find_net(*it));
 					}
 				}
 				else if(firsttoken == "nand")	{
 					Gate *gatefound = theDesign->add_find_gate(NAND,gate.at(1), atoi(gate.at(2).c_str()));
-					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
-					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
+					gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+					for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
 					{
+						LOG("inputs:");
+						LOG(*it);
 						gatefound->addInput(theDesign->find_net(*it));
 					}
 				}
 				else if(firsttoken == "nor")	{
 					Gate *gatefound = theDesign->add_find_gate(NOR,gate.at(1), atoi(gate.at(2).c_str()));
-					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
-					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
+					gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+					for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
 					{
+						LOG("inputs:");
+						LOG(*it);
 						gatefound->addInput(theDesign->find_net(*it));
 					}
 				}
 				else if(firsttoken == "xor")	{
 					Gate *gatefound = theDesign->add_find_gate(XOR,gate.at(1), atoi(gate.at(2).c_str()));
-					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
-					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
+					gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+					for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
 					{
+						LOG("inputs:");
+						LOG(*it);
 						gatefound->addInput(theDesign->find_net(*it));
 					}
 				}
 				else if(firsttoken == "not")	{
 					Gate *gatefound = theDesign->add_find_gate(NOT,gate.at(1), atoi(gate.at(2).c_str()));
-					gatefound->addOutput(theDesign->find_net(currentGatePuts.back()));
-					for(it=currentGatePuts.begin();it < currentGatePuts.end() -1; it++)
+					gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+					for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
 					{
+						LOG("inputs:");
+						LOG(*it);
 						gatefound->addInput(theDesign->find_net(*it));
 					}
 				}
@@ -208,6 +220,10 @@ int lineType(string identifier) // going line by line, so decide what kind of li
 	else if(identifier == "endmodule")
 	{
 		return END;
+	}
+	else if(identifier == " ")
+	{
+		return BLANK;
 	}
 	else
 	{

@@ -6,7 +6,7 @@ int main (int argc, char const *argv[])
 {
   LOG("Hi");
 	Design *aDesign;
-	aDesign = parseThatShit("test.v");
+	aDesign = parseThatShit("test2.v");
   LOG("BYE");
   return 0;
 }
