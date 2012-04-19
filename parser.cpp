@@ -35,7 +35,6 @@ enum {COMMENT, BLANK, MODULE, INPUT, OUTPUT, WIRE, GATE, END, ERROR};
 #define GATE_TYPE ""and" | "or" | "nand" | "nor" | "xor" | "not""
 
 int lineType(string currentline);
-bool checkID(string characters);
 void parenParser(vector<string> *ports, string input);
 void gateInfo(string type, string info, map<string, vector<string> > *gates);
 
@@ -69,7 +68,7 @@ Design *parseThatShit(string ifilename)
 				// line defining a module
 				string possibleIDModule;
 				getline(ss ,possibleIDModule, '(');
-				if(checkID(possibleIDModule))	{
+				if(regex_match(possibleIDModule, ID))	{
 					// was an id
 					
 				}
@@ -85,7 +84,7 @@ Design *parseThatShit(string ifilename)
 				// input line
 				string possibleIDInput;
 				getline(ss,possibleIDInput,';'); // get up to semicolon
-				if(checkID(possibleIDInput))	{
+				if(regex_match(possibleIDInput, ID))	{
 					inputs.push_back(possibleIDInput); // get id from selection and add it to the list of inputs
 				}
 				
@@ -97,7 +96,9 @@ Design *parseThatShit(string ifilename)
 				// output line
 				string possibleIDOutput;
 				getline(ss,possibleIDOutput,';'); // get up to semicolon
-				outputs.push_back(getID(possibleIDOutput)); // get id from selection and add it to the list of outputs
+				if(regex_match(possibleIDOutput, ID))	{
+					outputs.push_back(possibleIDOutput);
+				}
 				
 				break;
 			}
@@ -106,8 +107,10 @@ Design *parseThatShit(string ifilename)
 				// wire line
 				string possibleIDWire;
 				getline(ss,possibleIDWire,';'); // get up to semicolon
-				wires.push_back(getID(possibleIDWire)); // get id from selection and add it to the list of wires
-				
+				if(regex_match(possibleIDWire, ID))	{
+					wires.push_back(possibleIDWire);
+				}
+								
 				break;
 			}
 			case GATE :
@@ -174,14 +177,6 @@ int lineType(string identifier) // going line by line, so decide what kind of li
 	{
 		return ERROR;
 	}
-}
-
-string getID(string input)
-{
-	regex_t rgx(ID);
-	smatch result;
-	regex_search(input, result, rgx);
-	return result.str();
 }
 
 void parenParser(vector<string>* ports, string input)
