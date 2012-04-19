@@ -21,6 +21,7 @@ valgrind: gatesim
 clean::
 	$(RM) $(BINARY)
 	$(RM) test_suite
+	$(RM) -r *.dSYM
 
 .cpp.o:
 	$(CXX) -MMD -MP $(CXXFLAGS) -o $@ -c $<
