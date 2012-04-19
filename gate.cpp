@@ -10,16 +10,16 @@ using namespace std;
 Gate::Gate()
 {
 	inst_name = "Gate";
-	inputs = new vector<Net *>;
-	output = new Net;
+  delay = 0;
 }
 
 Gate::Gate(string n, int d)
 {
+  inputs = new vector<Net*>();
+  output = NULL;
+  
 	inst_name = n;
 	delay = d;
-	inputs = new vector<Net *>;
-	output = new Net;
 }
 
 string Gate::name()
@@ -84,17 +84,12 @@ void Gate::dumpNetList(ostream& os)
 And::And()
 {
 	inst_name = "AND";
-	delay = 0;
-	inputs = new vector<Net *>;
-	output = new Net;
 }
 
-And::And(string n, int d)
+And::And(string n, int d) : Gate(n,d)
 {
 	inst_name = n;
 	delay = d;
-	inputs = new vector<Net *>;
-	output = new Net;
 }
 
 char And::eval()
@@ -124,17 +119,12 @@ void And::dump(ostream &os)
 Or::Or()
 {
 	inst_name = "OR";
-	delay = 0;
-	inputs = new vector<Net *>;
-	output = new Net;
 }
 
-Or::Or(string n, int d)
+Or::Or(string n, int d)  : Gate(n,d)
 {
 	inst_name = n;
 	delay = d;
-	inputs = new vector<Net *>;
-	output = new Net;
 }
 
 char Or::eval()
@@ -164,17 +154,12 @@ void Or::dump(ostream &os)
 Nor::Nor()
 {
 	inst_name = "NOR";
-	delay = 0;
-	inputs = new vector<Net *>;
-	output = new Net;
 }
 
-Nor::Nor(string n, int d)
+Nor::Nor(string n, int d) : Gate(n,d)
 {
 	inst_name = n;
 	delay = d;
-	inputs = new vector<Net *>;
-	output = new Net;
 }
 
 char Nor::eval()
@@ -204,17 +189,12 @@ void Nor::dump(ostream &os)
 Nand::Nand()
 {
 	inst_name = "NAND";
-	delay = 0;
-	inputs = new vector<Net *>;
-	output = new Net;
 }
 
-Nand::Nand(string n, int d)
+Nand::Nand(string n, int d) : Gate(n,d)
 {
 	inst_name = n;
 	delay = d;
-	inputs = new vector<Net *>;
-	output = new Net;
 }
 
 char Nand::eval()
@@ -244,17 +224,12 @@ void Nand::dump(ostream &os)
 Xor::Xor()
 {
 	inst_name = "XOR";
-	delay = 0;
-	inputs = new vector<Net *>;
-	output = new Net;
 }
 
-Xor::Xor(string n, int d)
+Xor::Xor(string n, int d) : Gate(n,d)
 {
 	inst_name = n;
 	delay = d;
-	inputs = new vector<Net *>;
-	output = new Net;
 }
 
 char Xor::eval()
@@ -284,17 +259,12 @@ void Xor::dump(ostream &os)
 Not::Not()
 {
 	inst_name = "NOT";
-	delay = 0;
-	inputs = new vector<Net *>;
-	output = new Net;
 }
 
-Not::Not(string n, int d)
+Not::Not(string n, int d) : Gate(n,d)
 {
 	inst_name = n;
 	delay = d;
-	inputs = new vector<Net *>;
-	output = new Net;
 }
 
 char Not::eval()

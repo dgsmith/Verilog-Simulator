@@ -15,11 +15,6 @@ Design::Design(string n)
 	desname = n;
 }
 
-Design::~Design()
-{
-	
-}
-
 // returns name of device
 string Design::name()
 {
@@ -144,16 +139,16 @@ Gate* Design::add_find_gate(int gtype, string n, int d)
 }
 
 // allocates and creates a new vector of pointers to the PI Nets
-vector<Net *> * Design::get_pi_nets()
+vector<Net *> Design::get_pi_nets()
 {
 	vector<string>::iterator name;
 	map<string, Net*>::iterator foundnet;
-	vector<Net *> *PIs = new vector<Net *>;
+	vector<Net *> PIs;
 	for(name = pis.begin();name != pis.end();name++)
 	{
 		foundnet = design_nets.find(*name);
 		if(foundnet != design_nets.end())	{ // found pi!
-			PIs->push_back(foundnet->second);
+			PIs.push_back(foundnet->second);
 		}
 		else	{
 			//nothing to see here
@@ -163,16 +158,16 @@ vector<Net *> * Design::get_pi_nets()
 }
 
 // same as get_pi_nets
-vector<Net *> * Design::get_po_nets()
+vector<Net *> Design::get_po_nets()
 {
 	vector<string>::iterator name;
 	map<string, Net*>::iterator foundnet;
-	vector<Net *> *POs = new vector<Net *>;
+	vector<Net *> POs;
 	for(name = pos.begin();name != pos.end();name++)
 	{
 		foundnet = design_nets.find(*name);
 		if(foundnet != design_nets.end())	{ // found pi!
-			POs->push_back(foundnet->second);
+			POs.push_back(foundnet->second);
 		}
 		else	{
 			//nothing to see here
@@ -181,7 +176,7 @@ vector<Net *> * Design::get_po_nets()
 	return POs;
 }
 
-vector<Net *> * Design::get_wire_nets()
+vector<Net *> Design::get_wire_nets()
 {
   // Create a set of inputs and outputs so we can search faster
   set<string> pios;  
@@ -193,14 +188,14 @@ vector<Net *> * Design::get_wire_nets()
   }
   
   // To return
-  vector<Net *> *wire = new vector<Net *>;
+  vector<Net *> wire;
   
   // Iterate through all nets in the map
   for(map<string, Net *>::iterator it=design_nets.begin(); it!=design_nets.end(); it++) {
     // If it is not an input or output
     if(pios.find(it->second->name()) == pios.end())
     {
-      wire->push_back(it->second);
+      wire.push_back(it->second);
     } else {
       LOG("Skipping " << it->second->name());
     }
@@ -210,25 +205,25 @@ vector<Net *> * Design::get_wire_nets()
 }
 
 // returns pointers to all net objects
-vector<Net *> * Design::all_nets()
+vector<Net *> Design::all_nets()
 {
 	map<string, Net*>::iterator it;
-	vector<Net *> *all_nets = new vector<Net *>;
+	vector<Net *> all_nets;
 	for(it = design_nets.begin();it != design_nets.end(); it++)
 	{
-		all_nets->push_back(it->second);
+		all_nets.push_back(it->second);
 	}
 	return all_nets;
 }
 
 // similar to all_nets but for gates
-vector<Gate *> * Design::all_gates()
+vector<Gate *> Design::all_gates()
 {
 	map<string, Gate*>::iterator it;
-	vector<Gate *> *all_gates = new vector<Gate *>;
+	vector<Gate *> all_gates;
 	for(it = design_gates.begin();it != design_gates.end(); it++)
 	{
-		all_gates->push_back(it->second);
+		all_gates.push_back(it->second);
 	}
 	return all_gates;
 }
@@ -237,37 +232,35 @@ vector<Gate *> * Design::all_gates()
 void Design::dump(ostream &os)
 {
   os << "module " << this->name() << "(";
-  vector<Net*> *v = this->get_pi_nets();
-  for(vector<Net*>::iterator it=v->begin(); it!=v->end(); it++) {
+  vector<Net*> pi_nets = this->get_pi_nets();
+  for(vector<Net*>::iterator it=pi_nets.begin(); it!=pi_nets.end(); it++) {
     os << (*it)->name() << ", ";
   }
-  v = this->get_po_nets();
-  for(vector<Net*>::iterator it=v->begin(); it!=v->end(); it++) {
+  vector<Net*> po_nets = this->get_po_nets();
+  for(vector<Net*>::iterator it=po_nets.begin(); it!=po_nets.end(); it++) {
     os << (*it)->name();
-    if(it+1 != v->end()) os << ", ";
+    if(it+1 != po_nets.end()) os << ", ";
   }
   
   os << ");" << endl;
   
-  v = this->get_pi_nets();
-  for(vector<Net*>::iterator it=v->begin(); it!=v->end(); it++) {
+  for(vector<Net*>::iterator it=pi_nets.begin(); it!=pi_nets.end(); it++) {
     os << "\tinput " << (*it)->name() << ";" << endl;
   }
   
-  v = this->get_po_nets();
-  for(vector<Net*>::iterator it=v->begin(); it!=v->end(); it++) {
+  for(vector<Net*>::iterator it=po_nets.begin(); it!=po_nets.end(); it++) {
     os << "\toutput " << (*it)->name() << ";" << endl;
   }
   
-  v = this->get_wire_nets();
-  for(vector<Net*>::iterator it=v->begin(); it!=v->end(); it++) {
+  vector<Net*> wire_nets = this->get_wire_nets();
+  for(vector<Net*>::iterator it=wire_nets.begin(); it!=wire_nets.end(); it++) {
     os << "\twire " << (*it)->name() << ";" << endl;
   }
   
   os << endl;
   
-  vector<Gate*> *g = this->all_gates();
-  for(vector<Gate*>::iterator it=g->begin(); it!=g->end(); it++) {
+  vector<Gate*> all_gates = this->all_gates();
+  for(vector<Gate*>::iterator it=all_gates.begin(); it!=all_gates.end(); it++) {
     os << "\t";
     (*it)->dump(os);
   }

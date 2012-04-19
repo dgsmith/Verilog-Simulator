@@ -18,8 +18,7 @@ class Gate {
   Gate();
   Gate(string n, int d);
   virtual ~Gate() {
-		delete [] inputs;
-		delete [] output;
+    delete inputs;
   }
 
   virtual char eval() = 0;
@@ -45,7 +44,7 @@ class And : public Gate {
  public:
   And();
   And(string n, int d);
-  ~And() { Gate::~Gate(); }
+  ~And() {}
   char eval();
   void dump(ostream &os);
 };
@@ -54,7 +53,7 @@ class Or : public Gate {
  public:
   Or();
   Or(string n, int d);
-  ~Or() { Gate::~Gate(); }
+  ~Or() {}
   char eval();
   void dump(ostream &os);
 };
@@ -63,7 +62,7 @@ class Nor : public Gate {
  public:
   Nor();
   Nor(string n, int d);
-  ~Nor() { Gate::~Gate(); }
+  ~Nor() {}
   char eval();
   void dump(ostream &os);
 };
@@ -72,7 +71,7 @@ class Nand : public Gate {
  public:
   Nand();
   Nand(string n, int d);
-  ~Nand() { Gate::~Gate(); }
+  ~Nand() {}
   char eval();
   void dump(ostream &os);
 };
@@ -81,7 +80,7 @@ class Xor : public Gate {
  public:
   Xor();
   Xor(string n, int d);
-  ~Xor() { Gate::~Gate(); }
+  ~Xor() {}
   char eval();
   void dump(ostream &os);
 };
@@ -90,7 +89,7 @@ class Not : public Gate {
  public:
   Not();
   Not(string n, int d);
-  ~Not() { Gate::~Gate(); }
+  ~Not() {}
   char eval();
   void dump(ostream &os);
 };
