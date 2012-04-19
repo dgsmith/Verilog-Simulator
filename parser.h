@@ -9,6 +9,7 @@
 #include <string>
 #include <regex.h>
 #include <algorithm>
+#include <stdexcept>
 #include "design.h"
 #include "gate.h"
 #include "net.h"

@@ -15,7 +15,7 @@ Design *parseThatShit(string ifilename)
 	while(ifile.good())
 	{
     lineNum++;
-    
+		
 		string currentline;
 		getline(ifile, currentline);
 		stringstream ss(currentline);
@@ -116,7 +116,12 @@ Design *parseThatShit(string ifilename)
 					try	{
 						gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
 					} catch(range_error &ex)	{
-						ERROR(ex.what());
+						string out;
+						stringstream ss;
+						ss << lineNum;
+						out = ss.str();
+						ERROR("On line " << out << " " << ex.what());
+						throw runtime_error("Net not found :(");
 					}
 					for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
 					{
@@ -125,58 +130,153 @@ Design *parseThatShit(string ifilename)
 						try	{
 							gatefound->addInput(theDesign->find_net(*it));
 						} catch(range_error &ex)	{
-								ERROR(ex.what());
+							string out;
+							stringstream ss;
+							ss << lineNum;
+							out = ss.str();
+							ERROR("On line " << out << " " << ex.what());
+							throw runtime_error("Net not found :(");
 						}
 					}
 				}
 				else if(firsttoken == "or")	{
 					Gate *gatefound = theDesign->add_find_gate(OR,gate.at(1), atoi(gate.at(2).c_str()));
-					gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+					try	{
+						gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+					} catch(range_error &ex)	{
+						string out;
+						stringstream ss;
+						ss << lineNum;
+						out = ss.str();
+						ERROR("On line " << out << " " << ex.what());
+						throw runtime_error("Net not found :(");
+					}
 					for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
 					{
 						LOG("inputs:");
 						LOG(*it);
-						gatefound->addInput(theDesign->find_net(*it));
+						try	{
+							gatefound->addInput(theDesign->find_net(*it));
+						} catch(range_error &ex)	{
+							string out;
+							stringstream ss;
+							ss << lineNum;
+							out = ss.str();
+							ERROR("On line " << out << " " << ex.what());
+							throw runtime_error("Net not found :(");
+						}
 					}
 				}
 				else if(firsttoken == "nand")	{
 					Gate *gatefound = theDesign->add_find_gate(NAND,gate.at(1), atoi(gate.at(2).c_str()));
-					gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+					try	{
+						gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+					} catch(range_error &ex)	{
+						string out;
+						stringstream ss;
+						ss << lineNum;
+						out = ss.str();
+						ERROR("On line " << out << " " << ex.what());
+						throw runtime_error("Net not found :(");
+					}
 					for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
 					{
 						LOG("inputs:");
 						LOG(*it);
-						gatefound->addInput(theDesign->find_net(*it));
+						try	{
+							gatefound->addInput(theDesign->find_net(*it));
+						} catch(range_error &ex)	{
+							string out;
+							stringstream ss;
+							ss << lineNum;
+							out = ss.str();
+							ERROR("On line " << out << " " << ex.what());
+							throw runtime_error("Net not found :(");
+						}
 					}
 				}
 				else if(firsttoken == "nor")	{
 					Gate *gatefound = theDesign->add_find_gate(NOR,gate.at(1), atoi(gate.at(2).c_str()));
-					gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+					try	{
+						gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+					} catch(range_error &ex)	{
+						string out;
+						stringstream ss;
+						ss << lineNum;
+						out = ss.str();
+						ERROR("On line " << out << " " << ex.what());
+						throw runtime_error("Net not found :(");
+					}
 					for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
 					{
 						LOG("inputs:");
 						LOG(*it);
-						gatefound->addInput(theDesign->find_net(*it));
+						try	{
+							gatefound->addInput(theDesign->find_net(*it));
+						} catch(range_error &ex)	{
+							string out;
+							stringstream ss;
+							ss << lineNum;
+							out = ss.str();
+							ERROR("On line " << out << " " << ex.what());
+							throw runtime_error("Net not found :(");
+						}
 					}
 				}
 				else if(firsttoken == "xor")	{
 					Gate *gatefound = theDesign->add_find_gate(XOR,gate.at(1), atoi(gate.at(2).c_str()));
-					gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+					try	{
+						gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+					} catch(range_error &ex)	{
+						string out;
+						stringstream ss;
+						ss << lineNum;
+						out = ss.str();
+						ERROR("On line " << out << " " << ex.what());
+						throw runtime_error("Net not found :(");
+					}
 					for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
 					{
 						LOG("inputs:");
 						LOG(*it);
-						gatefound->addInput(theDesign->find_net(*it));
+						try	{
+							gatefound->addInput(theDesign->find_net(*it));
+						} catch(range_error &ex)	{
+							string out;
+							stringstream ss;
+							ss << lineNum;
+							out = ss.str();
+							ERROR("On line " << out << " " << ex.what());
+							throw runtime_error("Net not found :(");
+						}
 					}
 				}
 				else if(firsttoken == "not")	{
 					Gate *gatefound = theDesign->add_find_gate(NOT,gate.at(1), atoi(gate.at(2).c_str()));
-					gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+					try	{
+						gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
+					} catch(range_error &ex)	{
+						string out;
+						stringstream ss;
+						ss << lineNum;
+						out = ss.str();
+						ERROR("On line " << out << " " << ex.what());
+						throw runtime_error("Net not found :(");
+					}
 					for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
 					{
 						LOG("inputs:");
 						LOG(*it);
-						gatefound->addInput(theDesign->find_net(*it));
+						try	{
+							gatefound->addInput(theDesign->find_net(*it));
+						} catch(range_error &ex)	{
+							string out;
+							stringstream ss;
+							ss << lineNum;
+							out = ss.str();
+							ERROR("On line " << out << " " << ex.what());
+							throw runtime_error("Net not found :(");
+						}
 					}
 				}
 				else	{
@@ -193,7 +293,11 @@ Design *parseThatShit(string ifilename)
 			case ERROR :
 			{
 				// error...
-        ERROR("Error...");
+				string out;
+				stringstream ss;
+				ss << lineNum;
+				out = ss.str();
+        ERROR("Line read error on line " << out);
 				break;
 			}
 		}
@@ -232,7 +336,7 @@ int lineType(string identifier) // going line by line, so decide what kind of li
 	{
 		return END;
 	}
-	else if(identifier == " ")
+	else if((identifier == " ") | (identifier == "\n") | (identifier == "\t") | (identifier == ""))
 	{
 		return BLANK;
 	}
