@@ -35,7 +35,7 @@ enum {COMMENT, BLANK, MODULE, INPUT, OUTPUT, WIRE, GATE, END, ERROR};
 #define GATE_TYPE ""and" | "or" | "nand" | "nor" | "xor" | "not""
 
 int lineType(string currentline);
-string getID(string characters);
+bool checkID(string characters);
 void parenParser(vector<string> *ports, string input);
 void gateInfo(string type, string info, map<string, vector<string> > *gates);
 
@@ -69,7 +69,10 @@ Design *parseThatShit(string ifilename)
 				// line defining a module
 				string possibleIDModule;
 				getline(ss ,possibleIDModule, '(');
-				designName = getID(possibleIDModule); // get name 
+				if(checkID(possibleIDModule))	{
+					// was an id
+					
+				}
 				
 				string possiblePortsModule;
 				getline(ss, possiblePortsModule, ')');
@@ -82,7 +85,10 @@ Design *parseThatShit(string ifilename)
 				// input line
 				string possibleIDInput;
 				getline(ss,possibleIDInput,';'); // get up to semicolon
-				inputs.push_back(getID(possibleIDInput)); // get id from selection and add it to the list of inputs
+				if(checkID(possibleIDInput))	{
+					inputs.push_back(possibleIDInput); // get id from selection and add it to the list of inputs
+				}
+				
 				
 				break;
 			}
@@ -172,7 +178,7 @@ int lineType(string identifier) // going line by line, so decide what kind of li
 
 string getID(string input)
 {
-	regex rgx(ID);
+	regex_t rgx(ID);
 	smatch result;
 	regex_search(input, result, rgx);
 	return result.str();
