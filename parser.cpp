@@ -321,6 +321,7 @@ Design *parseThatShit(string ifilename)
  				}
 			}
 		} catch(runtime_error &ex)	{
+			gate.clear();
 			ERROR(ex.what());
 		}
 	}
