@@ -1,5 +1,7 @@
 #include "parser.h"
 
+unsigned int lineNum = 0;
+
 Design *parseThatShit(string ifilename)
 {
 	Design *theDesign = new Design;
@@ -10,7 +12,6 @@ Design *parseThatShit(string ifilename)
 	//vector<string> wires;
 	vector<string> gate;
 	
-  unsigned int lineNum = 0;
 	ifstream ifile(ifilename.c_str(), ifstream::in);
 	while(ifile.good())
 	{
@@ -19,10 +20,12 @@ Design *parseThatShit(string ifilename)
 		string currentline;
 		getline(ifile, currentline);
 		stringstream ss(currentline);
-		string firsttoken;
+		string firsttoken, lasttoken;
 		ss >> firsttoken;
+		int length = ss.str().length();
+		lasttoken = ss.str()[length];
 		try{
-			switch(lineType(firsttoken))
+			switch(lineType(firsttoken, lasttoken))
  			{
  				case COMMENT :
  					// comment line
@@ -44,6 +47,9 @@ Design *parseThatShit(string ifilename)
  						LOG("Module ID:");
  						LOG(designName);
  					}
+					else	{
+						throw runtime_error("Module declaration error");
+					}
  					
  					string possiblePortsModule;
  					getline(ss, possiblePortsModule, ')');
@@ -123,8 +129,7 @@ Design *parseThatShit(string ifilename)
  							stringstream ss;
  							ss << lineNum;
  							out = ss.str();
- 							ERROR("On line " << out << " " << ex.what());
- 							throw runtime_error("Syntax error");
+ 							throw runtime_error("On line " + out + " " + ex.what());
  						}
  						LOG("inputs:");
  						for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
@@ -137,8 +142,7 @@ Design *parseThatShit(string ifilename)
  								stringstream ss;
  								ss << lineNum;
  								out = ss.str();
- 								ERROR("On line " << out << " " << ex.what());
- 								throw runtime_error("Syntax error");
+ 								throw runtime_error("On line " + out + " " + ex.what());
  							}
  						}
 						gate.clear();
@@ -154,8 +158,7 @@ Design *parseThatShit(string ifilename)
  							stringstream ss;
  							ss << lineNum;
  							out = ss.str();
- 							ERROR("On line " << out << " " << ex.what());
- 							throw runtime_error("Syntax error");
+ 							throw runtime_error("On line " + out + " " + ex.what());
  						}
  						LOG("inputs:");
  						for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
@@ -168,8 +171,7 @@ Design *parseThatShit(string ifilename)
  								stringstream ss;
  								ss << lineNum;
  								out = ss.str();
- 								ERROR("On line " << out << " " << ex.what());
- 								throw runtime_error("Syntax error");
+ 								throw runtime_error("On line " + out + " " + ex.what());
  							}
  						}
 						gate.clear();
@@ -185,8 +187,7 @@ Design *parseThatShit(string ifilename)
  							stringstream ss;
  							ss << lineNum;
  							out = ss.str();
- 							ERROR("On line " << out << " " << ex.what());
- 							throw runtime_error("Syntax error");
+ 							throw runtime_error("On line " + out + " " + ex.what());
  						}
  						LOG("inputs:");
  						for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
@@ -199,8 +200,7 @@ Design *parseThatShit(string ifilename)
  								stringstream ss;
  								ss << lineNum;
  								out = ss.str();
- 								ERROR("On line " << out << " " << ex.what());
- 								throw runtime_error("Syntax error");
+ 								throw runtime_error("On line " + out + " " + ex.what());
  							}
  						}
 						gate.clear();
@@ -216,8 +216,7 @@ Design *parseThatShit(string ifilename)
  							stringstream ss;
  							ss << lineNum;
  							out = ss.str();
- 							ERROR("On line " << out << " " << ex.what());
- 							throw runtime_error("Syntax error");
+ 							throw runtime_error("On line " + out + " " + ex.what());
  						}
  						LOG("inputs:");
  						for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
@@ -230,8 +229,7 @@ Design *parseThatShit(string ifilename)
  								stringstream ss;
  								ss << lineNum;
  								out = ss.str();
- 								ERROR("On line " << out << " " << ex.what());
- 								throw runtime_error("Syntax error");
+ 								throw runtime_error("On line " + out + " " + ex.what());
  							}
  						}
 						gate.clear();
@@ -247,8 +245,7 @@ Design *parseThatShit(string ifilename)
  							stringstream ss;
  							ss << lineNum;
  							out = ss.str();
- 							ERROR("On line " << out << " " << ex.what());
- 							throw runtime_error("Syntax error");
+ 							throw runtime_error("On line " + out + " " + ex.what());
  						}
  						LOG("inputs:");
  						for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
@@ -261,8 +258,7 @@ Design *parseThatShit(string ifilename)
  								stringstream ss;
  								ss << lineNum;
  								out = ss.str();
- 								ERROR("On line " << out << " " << ex.what());
- 								throw runtime_error("Syntax error");
+ 								throw runtime_error("On line " + out + " " + ex.what());
  							}
  						}
 						gate.clear();
@@ -278,8 +274,7 @@ Design *parseThatShit(string ifilename)
  							stringstream ss;
  							ss << lineNum;
  							out = ss.str();
- 							ERROR("On line " << out << " " << ex.what());
- 							throw runtime_error("Syntax error");
+ 							throw runtime_error("On line " + out + " " + ex.what());
  						}
  						LOG("inputs:");
  						for(it=currentGatePuts.begin()+1;it < currentGatePuts.end(); it++)
@@ -292,8 +287,7 @@ Design *parseThatShit(string ifilename)
  								stringstream ss;
  								ss << lineNum;
  								out = ss.str();
- 								ERROR("On line " << out << " " << ex.what());
- 								throw runtime_error("Syntax error");
+ 								throw runtime_error("On line " + out + " " + ex.what());
  							}
  						}
 						gate.clear();
@@ -316,58 +310,73 @@ Design *parseThatShit(string ifilename)
  					stringstream ss;
  					ss << lineNum;
  					out = ss.str();
- 			    ERROR("Line read error on line " << out);
+ 			    ERROR("Read error on line " << out);
  					break;
  				}
 			}
 		} catch(runtime_error &ex)	{
 			gate.clear();
-			ERROR(ex.what());
+			throw runtime_error(ex.what());
 		}
 	}
 	ifile.close();
 	return theDesign;
 }
 
-int lineType(string identifier) // going line by line, so decide what kind of line this is
+int lineType(string identifier, string lasttoken) // going line by line, so decide what kind of line this is
 {
-
-	if(identifier == "//")
-	{
-		return COMMENT;
+	int returnValue;
+	try	{
+		if(identifier == "//")
+		{
+			returnValue = COMMENT;
+		}
+		else if(identifier == "module")
+		{
+			returnValue = MODULE;
+			semicolonCheck(lasttoken);
+		}
+		else if(identifier == "input")
+		{
+			returnValue = INPUT;
+			semicolonCheck(lasttoken);
+		}
+		else if(identifier == "output")
+		{
+			returnValue = OUTPUT;
+			semicolonCheck(lasttoken);
+		}
+		else if(identifier == "wire")
+		{
+			returnValue = WIRE;
+			semicolonCheck(lasttoken);
+		}
+		else if((identifier == "and") | (identifier == "or") | (identifier == "nand") | (identifier == "nor") | (identifier == "xor") | (identifier == "not"))
+		{
+			returnValue = GATE;
+			semicolonCheck(lasttoken);
+		}
+		else if(identifier == "endmodule")
+		{
+			returnValue = END;
+		}
+		else if((identifier == " ") | (identifier == "\n") | (identifier == "\t") | (identifier == ""))
+		{
+			returnValue = BLANK;
+		}
+		else
+		{
+			throw runtime_error("Missing or misspelled keyword at line: ");
+		}
+	} catch(runtime_error &ex) {
+		string out;
+		stringstream ss;
+		ss << lineNum;
+		out = ss.str();
+		throw runtime_error(ex.what() + out);
 	}
-	else if(identifier == "module")
-	{
-		return MODULE;
-	}
-	else if(identifier == "input")
-	{
-		return INPUT;
-	}
-	else if(identifier == "output")
-	{
-		return OUTPUT;
-	}
-	else if(identifier == "wire")
-	{
-		return WIRE;
-	}
-	else if((identifier == "and") | (identifier == "or") | (identifier == "nand") | (identifier == "nor") | (identifier == "xor") | (identifier == "not"))
-	{
-		return GATE;
-	}
-	else if(identifier == "endmodule")
-	{
-		return END;
-	}
-	else if((identifier == " ") | (identifier == "\n") | (identifier == "\t") | (identifier == ""))
-	{
-		return BLANK;
-	}
-	else
-	{
-		return ERROR;
-	}
+	
+	return returnValue;
 }
 
 void parenParser(vector<string>* ports, string input)
@@ -437,4 +446,18 @@ string removeWhitespace(string str)
 	//LOG("Started removing whitespace");
 	str.erase(remove_if(str.begin(), str.end(), ::isspace), str.end());
 	return str;
+}
+
+void semicolonCheck(string token)
+{
+	if(token == ";") {
+		// good!
+	}
+	else {
+		string out;
+		stringstream ss;
+		ss << lineNum;
+		out = ss.str();
+		throw runtime_error("Missing semicolon at line: " + out);
+	}
 }

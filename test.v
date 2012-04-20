@@ -1,4 +1,4 @@
-// comment
+// comment;
 module test(a, b, c, d, x, y, z);
    input a;
    input b;

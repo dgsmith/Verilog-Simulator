@@ -24,7 +24,7 @@ int main (int argc, char const *argv[])
   if (argc <= 2)
 		{
 	 		cout << "Usage: " << argv[0] << " <Input Filename>  <Output Filename>" << endl;
-	   	exit(1);
+			return 1;
 	  }
 	string ifile = argv[1];
 	string ofile = argv[2];
@@ -33,7 +33,9 @@ int main (int argc, char const *argv[])
 	try{
 		a = parseThatShit(ifile);
 	} catch(runtime_error &ex)	{
+		ERROR("Could not complete parse due to:");
 		ERROR(ex.what());
+		return 1;
 	}
 	dumpToFile(ofile, a);
   
