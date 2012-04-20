@@ -1,6 +1,6 @@
 #include "parser.h"
 
-unsigned int lineNum = 0;
+static unsigned int lineNum = 0;
 
 Design *parseThatShit(string ifilename)
 {
@@ -16,7 +16,7 @@ Design *parseThatShit(string ifilename)
 	while(ifile.good())
 	{
     lineNum++;
-		
+    
 		string currentline;
 		getline(ifile, currentline);
 		stringstream ss(currentline);
@@ -306,18 +306,18 @@ Design *parseThatShit(string ifilename)
  				case ERROR :
  				{
  					// error...
- 					string out;
  					stringstream ss;
- 					ss << lineNum;
- 					out = ss.str();
- 			    ERROR("Read error on line " << out);
+ 					ss << "Missing or misspelled keyword on line " << lineNum;
+          throw runtime_error(ss.str());
  					break;
  				}
 			}
 		} catch(runtime_error &ex)	{
-			gate.clear();
-			throw runtime_error(ex.what());
-		}
+      ERROR("Fatal error encountered, parsing stopped...");
+      ifile.close();
+      delete theDesign;
+      throw ex;
+    }
 	}
 	ifile.close();
 	return theDesign;
@@ -332,54 +332,46 @@ int lineType(string identifier, string lasttoken) // going line by line, so deci
 	out = ss.str();
 	LOG("line number: " << out);
 	LOG("lasttoken = " << lasttoken);
-	try	{
-		if(identifier == "//")
-		{
-			returnValue = COMMENT;
-		}
-		else if(identifier == "module")
-		{
-			returnValue = MODULE;
-			semicolonCheck(lasttoken);
-		}
-		else if(identifier == "input")
-		{
-			returnValue = INPUT;
-			semicolonCheck(lasttoken);
-		}
-		else if(identifier == "output")
-		{
-			returnValue = OUTPUT;
-			semicolonCheck(lasttoken);
-		}
-		else if(identifier == "wire")
-		{
-			returnValue = WIRE;
-			semicolonCheck(lasttoken);
-		}
-		else if((identifier == "and") | (identifier == "or") | (identifier == "nand") | (identifier == "nor") | (identifier == "xor") | (identifier == "not"))
-		{
-			returnValue = GATE;
-			semicolonCheck(lasttoken);
-		}
-		else if(identifier == "endmodule")
-		{
-			returnValue = END;
-		}
-		else if((identifier == " ") | (identifier == "\n") | (identifier == "\t") | (identifier == ""))
-		{
-			returnValue = BLANK;
-		}
-		else
-		{
-			throw runtime_error("Missing or misspelled keyword at line: ");
-		}
-	} catch(runtime_error &ex) {
-		string out;
-		stringstream ss;
-		ss << lineNum;
-		out = ss.str();
-		throw runtime_error(ex.what() + out);
+	if(identifier == "//")
+	{
+		returnValue = COMMENT;
+	}
+	else if(identifier == "module")
+	{
+		returnValue = MODULE;
+		semicolonCheck(lasttoken);
+	}
+	else if(identifier == "input")
+	{
+		returnValue = INPUT;
+		semicolonCheck(lasttoken);
+	}
+	else if(identifier == "output")
+	{
+		returnValue = OUTPUT;
+		semicolonCheck(lasttoken);
+	}
+	else if(identifier == "wire")
+	{
+		returnValue = WIRE;
+		semicolonCheck(lasttoken);
+	}
+	else if((identifier == "and") | (identifier == "or") | (identifier == "nand") | (identifier == "nor") | (identifier == "xor") | (identifier == "not"))
+	{
+		returnValue = GATE;
+		semicolonCheck(lasttoken);
+	}
+	else if(identifier == "endmodule")
+	{
+		returnValue = END;
+	}
+	else if((identifier == " ") | (identifier == "\n") | (identifier == "\t") | (identifier == ""))
+	{
+		returnValue = BLANK;
+	}
+	else
+	{
+    returnValue = ERROR;
 	}
 	
 	return returnValue;
@@ -460,11 +452,8 @@ void semicolonCheck(string token)
 		// good!
 	}
 	else {
-		string out;
 		stringstream ss;
-		ss << lineNum;
-		out = ss.str();
-		LOG(out);
-		throw runtime_error("Missing semicolon at line: " + out);
+		ss << "Missing semicolon at line: " << lineNum;
+		throw runtime_error(ss.str());
 	}
 }

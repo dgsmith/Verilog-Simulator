@@ -10,10 +10,10 @@
 
 using namespace std;
 
-void dumpToFile(string filename, Design* aDesign)
+void dumpToFile(string from, string filename, Design* aDesign)
 {
   ofstream outfile(filename.c_str());
-  outfile << "// Dumped from " << filename << endl;
+  outfile << "// Dumped from " << from << endl;
   aDesign->dump(outfile); 
   
   outfile.close();
@@ -33,11 +33,12 @@ int main (int argc, char const *argv[])
 	try{
 		a = parseThatShit(ifile);
 	} catch(runtime_error &ex)	{
-		ERROR("Could not complete parse due to:");
-		ERROR(ex.what());
-		return 1;
+    stringstream ss;
+    ss << "Reason: " << ex.what();
+    ERROR(ss.str());
+		return -1;
 	}
-	dumpToFile(ofile, a);
+	dumpToFile(ifile, ofile, a);
   
   delete a;
   
