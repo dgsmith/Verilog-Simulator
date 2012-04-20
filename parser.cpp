@@ -23,7 +23,7 @@ Design *parseThatShit(string ifilename)
 		string firsttoken, lasttoken;
 		ss >> firsttoken;
 		int length = ss.str().length();
-		lasttoken = ss.str()[length];
+		lasttoken = ss.str()[length - 1];
 		try{
 			switch(lineType(firsttoken, lasttoken))
  			{
@@ -326,6 +326,12 @@ Design *parseThatShit(string ifilename)
 int lineType(string identifier, string lasttoken) // going line by line, so decide what kind of line this is
 {
 	int returnValue;
+	string out;
+	stringstream ss;
+	ss << lineNum;
+	out = ss.str();
+	LOG("line number: " << out);
+	LOG("lasttoken = " << lasttoken);
 	try	{
 		if(identifier == "//")
 		{
@@ -458,6 +464,7 @@ void semicolonCheck(string token)
 		stringstream ss;
 		ss << lineNum;
 		out = ss.str();
+		LOG(out);
 		throw runtime_error("Missing semicolon at line: " + out);
 	}
 }

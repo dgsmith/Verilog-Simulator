@@ -3,7 +3,7 @@ module test(a, b, c, d, x, y, z);
    input a;
    input b;
    input c;
-   input d;
+   input d
    output x;
    output y;
    output z;
