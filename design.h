@@ -14,7 +14,16 @@ class Design {
  public:
   Design();
   Design(string n);
-  ~Design();
+  ~Design() {
+    for(map<string, Net*>::iterator it=design_nets.begin(); it!=design_nets.end(); it++)
+    {
+      delete it->second;
+    }
+    for(map<string, Gate*>::iterator it=design_gates.begin(); it!=design_gates.end(); it++)
+    {
+      delete it->second;
+    }
+  }
 	void make_name(string n);
   string name();
   void add_pi(string n);
@@ -23,11 +32,11 @@ class Design {
   Gate *find_gate(string inst_name);
   Net* add_find_net(string n);
   Gate* add_find_gate(int gtype, string n, int d);
-  vector<Net *> *get_pi_nets();
-  vector<Net *> *get_po_nets();
-  vector<Net *> *get_wire_nets();
-  vector<Net *> *all_nets();
-  vector<Gate *> *all_gates();
+  vector<Net *> get_pi_nets();
+  vector<Net *> get_po_nets();
+  vector<Net *> get_wire_nets();
+  vector<Net *> all_nets();
+  vector<Gate *> all_gates();
   void dump(ostream &os);
  private:
   string desname;

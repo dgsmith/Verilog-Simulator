@@ -39,5 +39,7 @@ int main (int argc, char const *argv[])
 	}
 	dumpToFile(ofile, a);
   
+  delete a;
+  
   return 0;
 }
