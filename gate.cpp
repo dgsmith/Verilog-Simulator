@@ -94,7 +94,45 @@ And::And(string n, int d) : Gate(n,d)
 
 char And::eval()
 {
-	
+	char val;
+	vector<Net*>::iterator it = inputs->begin();
+	val = it->getVal();
+	it++;
+	for(it;it != inputs->end(); it++)
+	{
+		switch(it->getVal())
+		{
+			case 'X':
+			{
+				if((val == 'X') | (val == '1'))	{
+					val = 'X';
+				}
+				else if(val == '0')	{
+					val = '0';
+				}
+				else {
+					//error in val
+				}
+				break;
+			}
+			case '0':
+			{
+				val = '0';
+				break;
+			}
+			case '1':
+			{
+				// nothing needed to do
+				break;
+			}
+			default:
+			{
+				// something wrong...
+				break;
+			}
+		}
+	}
+	return val;
 }
 
 void And::dump(ostream &os)
@@ -129,7 +167,45 @@ Or::Or(string n, int d)  : Gate(n,d)
 
 char Or::eval()
 {
-	
+	char val;
+	vector<Net*>::iterator it = inputs->begin();
+	val = it->getVal();
+	it++;
+	for(it;it != inputs->end(); it++)
+	{
+		switch(it->getVal())
+		{
+			case 'X':
+			{
+				if((val == 'X') | (val == '0'))	{
+					val = 'X';
+				}
+				else if(val == '1')	{
+					val = '1';
+				}
+				else {
+					//error in val
+				}
+				break;
+			}
+			case '0':
+			{
+				// nothing needed to do
+				break;
+			}
+			case '1':
+			{
+				val = '1';
+				break;
+			}
+			default:
+			{
+				// something wrong...
+				break;
+			}
+		}
+	}
+	return val;
 }
 
 void Or::dump(ostream &os)
@@ -164,7 +240,53 @@ Nor::Nor(string n, int d) : Gate(n,d)
 
 char Nor::eval()
 {
-	
+	char val;
+	vector<Net*>::iterator it = inputs->begin();
+	val = it->getVal();
+	it++;
+	for(it;it != inputs->end(); it++)
+	{
+		switch(it->getVal())
+		{
+			case 'X':
+			{
+				if((val == 'X') | (val == '0'))	{
+					val = 'X';
+				}
+				else if(val == '1')	{
+					val = '0';
+				}
+				else {
+					//error in val
+				}
+				break;
+			}
+			case '0':
+			{
+				if (val == 'X')	{
+					// do nothing
+				}
+				else if(val == '0')	{
+					val = '1';
+				}
+				else if(val == '1')	{
+					val = '0';
+				}
+				break;
+			}
+			case '1':
+			{
+				val = '0';
+				break;
+			}
+			default:
+			{
+				// something wrong...
+				break;
+			}
+		}
+	}
+	return val;
 }
 
 void Nor::dump(ostream &os)
@@ -199,7 +321,53 @@ Nand::Nand(string n, int d) : Gate(n,d)
 
 char Nand::eval()
 {
-	
+	char val;
+	vector<Net*>::iterator it = inputs->begin();
+	val = it->getVal();
+	it++;
+	for(it;it != inputs->end(); it++)
+	{
+		switch(it->getVal())
+		{
+			case 'X':
+			{
+				if((val == 'X') | (val == '1'))	{
+					val = 'X';
+				}
+				else if(val == '0')	{
+					val = '1';
+				}
+				else {
+					//error in val
+				}
+				break;
+			}
+			case '0':
+			{
+				val = '1';
+				break;
+			}
+			case '1':
+			{
+				if (val == 'X')	{
+					// do nothing
+				}
+				else if(val == '0')	{
+					val = '1';
+				}
+				else if(val == '1')	{
+					val = '0';
+				}
+				break;
+			}
+			default:
+			{
+				// something wrong...
+				break;
+			}
+		}
+	}
+	return val;
 }
 
 void Nand::dump(ostream &os)
@@ -234,7 +402,45 @@ Xor::Xor(string n, int d) : Gate(n,d)
 
 char Xor::eval()
 {
-	
+	char val;
+	vector<Net*>::iterator it = inputs->begin();
+	val = it->getVal();
+	it++;
+	for(it;it != inputs->end(); it++)
+	{
+		switch(it->getVal())
+		{
+			case 'X':
+			{
+				val = 'X';
+				break;
+			}
+			case '0':
+			{
+				// nothing to do here
+				break;
+			}
+			case '1':
+			{
+				if (val == 'X')	{
+					// do nothing
+				}
+				else if(val == '0')	{
+					val = '1';
+				}
+				else if(val == '1')	{
+					val = '0';
+				}
+				break;
+			}
+			default:
+			{
+				// something wrong...
+				break;
+			}
+		}
+	}
+	return val;
 }
 
 void Xor::dump(ostream &os)
@@ -269,7 +475,47 @@ Not::Not(string n, int d) : Gate(n,d)
 
 char Not::eval()
 {
-	
+	char val;
+	vector<Net*>::iterator it = inputs->begin();
+	val = it->getVal();
+	it++;
+	for(it;it != inputs->end(); it++)
+	{
+		switch(it->getVal())
+		{
+			case 'X':
+			{
+				val = 'X';
+				break;
+			}
+			case '0':
+			{
+				if((val == 'X') | (val == '1'))	{
+					val = 'X';
+				}
+				else if(val == '0')	{
+					val = '1';
+				}
+				break;
+			}
+			case '1':
+			{
+				if((val == 'X') | (val == '0'))	{
+					val = 'X';
+				}
+				else if(val == '1')	{
+					val = '0';
+				}
+				break;
+			}
+			default:
+			{
+				// something wrong...
+				break;
+			}
+		}
+	}
+	return val;
 }
 
 void Not::dump(ostream &os)
