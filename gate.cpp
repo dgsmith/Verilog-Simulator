@@ -94,7 +94,23 @@ And::And(string n, int d) : Gate(n,d)
 
 char And::eval()
 {
-	char val;
+	if((int) inputs.size() == 1)	{
+		switch(inputs[0]->getVal())
+		{
+			case 'X':
+			{
+				val = input[0]->getVal();
+			}
+			case '0':
+			{
+				val = inputs[0]->getVal();
+			}
+			case '1':
+			{
+				val = inputs[0]->getVal();
+			}
+		}
+	}
 	vector<Net*>::iterator it = inputs->begin();
 	val = it->getVal();
 	it++;
@@ -167,7 +183,23 @@ Or::Or(string n, int d)  : Gate(n,d)
 
 char Or::eval()
 {
-	char val;
+	if((int) inputs.size() == 1)	{
+		switch(inputs[0]->getVal())
+		{
+			case 'X':
+			{
+				val = input[0]->getVal();
+			}
+			case '0':
+			{
+				val = inputs[0]->getVal();
+			}
+			case '1':
+			{
+				val = inputs[0]->getVal();
+			}
+		}
+	}
 	vector<Net*>::iterator it = inputs->begin();
 	val = it->getVal();
 	it++;
@@ -240,7 +272,23 @@ Nor::Nor(string n, int d) : Gate(n,d)
 
 char Nor::eval()
 {
-	char val;
+	if((int) inputs.size() == 1)	{
+		switch(inputs[0]->getVal())
+		{
+			case 'X':
+			{
+				val = input[0]->getVal();
+			}
+			case '0':
+			{
+				val = '1'
+			}
+			case '1':
+			{
+				val = '0';
+			}
+		}
+	}
 	vector<Net*>::iterator it = inputs->begin();
 	val = it->getVal();
 	it++;
@@ -321,7 +369,23 @@ Nand::Nand(string n, int d) : Gate(n,d)
 
 char Nand::eval()
 {
-	char val;
+	if((int) inputs.size() == 1)	{
+		switch(inputs[0]->getVal())
+		{
+			case 'X':
+			{
+				val = input[0]->getVal();
+			}
+			case '0':
+			{
+				val = '1';
+			}
+			case '1':
+			{
+				val = '0';
+			}
+		}
+	}
 	vector<Net*>::iterator it = inputs->begin();
 	val = it->getVal();
 	it++;
@@ -402,7 +466,23 @@ Xor::Xor(string n, int d) : Gate(n,d)
 
 char Xor::eval()
 {
-	char val;
+	if((int) inputs.size() == 1)	{
+		switch(inputs[0]->getVal())
+		{
+			case 'X':
+			{
+				val = input[0]->getVal();
+			}
+			case '0':
+			{
+				val = inputs[0]->getVal();
+			}
+			case '1':
+			{
+				val = '0';
+			}
+		}
+	}
 	vector<Net*>::iterator it = inputs->begin();
 	val = it->getVal();
 	it++;
@@ -475,7 +555,23 @@ Not::Not(string n, int d) : Gate(n,d)
 
 char Not::eval()
 {
-	char val;
+	if((int) inputs.size() == 1)	{
+		switch(inputs[0]->getVal())
+		{
+			case 'X':
+			{
+				val = input[0]->getVal();
+			}
+			case '0':
+			{
+				val = '1';
+			}
+			case '1':
+			{
+				val = '0';
+			}
+		}
+	}
 	vector<Net*>::iterator it = inputs->begin();
 	val = it->getVal();
 	it++;
