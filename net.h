@@ -5,6 +5,8 @@
 #include "global.h"
 using namespace std;
 
+enum {WHITE, GREY, BLACK};
+
 class Gate;
 
 class Net {
@@ -22,8 +24,10 @@ class Net {
   string name();
   void setVal(char v);
   char computeVal();
+	char computeDelay();
   char getVal();
   void printDriversLoads();
+	int color;
  private:
   vector<Gate *> *drivers;
   vector<Gate *> *loads;

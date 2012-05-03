@@ -1,6 +1,7 @@
 #include "design.h"
 #include <stdexcept>
 #include <set>
+
 using namespace std;
 
 Design::Design()
@@ -267,4 +268,36 @@ void Design::dump(ostream &os)
   
   os << "endmodule" << endl;
   
+}
+
+void Design::toposort()
+{
+	vector<Net*>::iterator it = this->get_po_nets().begin();
+	for(; it != this->get_po_nets().end(); it++)
+	{
+		(*it)->color = WHITE;
+	}
+	toposortedList.clear();
+	for(; it != this->get_po_nets().end(); it++)
+	{
+		if((*it)->color == WHITE)	{
+			this->DFSvisit(*it);
+		}
+	}
+}
+
+void Design::DFSvisit(Net* currentNet)
+{
+	currentNet->color = GREY;
+	for(vector<Gate *>::iterator gate = currentNet->getDrivers()->begin(); gate != currentNet->getDrivers()->end(); gate++)
+	{
+		for(vector<Net *>:: iterator net = (*gate)->getInputs()->begin(); net != (*gate)->getInputs()->end(); net++)
+		{
+			if((*net)->color == WHITE)	{
+				this->DFSvisit(*net);
+			}
+		}
+	}
+	currentNet->color = BLACK;
+	toposortedList.push_back(currentNet);
 }

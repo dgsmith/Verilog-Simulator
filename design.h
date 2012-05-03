@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <deque>
 #include "global.h"
 #include "gate.h"
 #include "net.h"
@@ -38,12 +39,15 @@ class Design {
   vector<Net *> all_nets();
   vector<Gate *> all_gates();
   void dump(ostream &os);
+	void DFSvisit(Net* currentNet);
+	void toposort();
  private:
   string desname;
   map<string, Net *> design_nets;
   map<string, Gate *> design_gates;
   vector<string> pis;
   vector<string> pos;
+	deque<Net *> toposortedList;
 
 };
 

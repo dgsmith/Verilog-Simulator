@@ -52,9 +52,9 @@ char Net::computeVal()
 	{
 		vector<char> values;
 		char temp;
-		for(vector<Gate*>::iterator it=drivers->begin();it != drivers.end(); it++)
+		for(vector<Gate*>::iterator it=drivers->begin();it != drivers->end(); it++)
 		{
-			values.push_back(it->eval());
+			values.push_back((*it)->eval());
 		}
 		temp = values[0];
 		for(vector<char>::iterator it=values.begin() + 1;it != values.end(); it++)
@@ -73,7 +73,7 @@ char Net::computeVal()
 	}
 	else // just one driver
 	{
-		val = drivers[0]->eval();
+		val = drivers->front()->eval();
 	}
 	return val;
 }
@@ -97,4 +97,9 @@ void Net::printDriversLoads()
   
   cout << endl;
   
+}
+
+char computeDelay()
+{
+	
 }
