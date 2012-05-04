@@ -110,7 +110,7 @@ void test_delay()
 void test_simulation()
 {
   Design *design = parseThatShit("test.v");
-  LogicSim sim("test.sim");
+  LogicSim sim("test.sim", design);
   design->toposort();
   sim.runSimulation(design->get_toposortedList());
   sim.outputTheFile("test.out", design);
