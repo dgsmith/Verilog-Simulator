@@ -11,7 +11,7 @@ using namespace std;
 static unsigned int lineNum = 0;
 enum{INPUTS, VALUES, BLANK};
 
-void LogicSim::parseSimFile(string file)
+LogicSim::LogicSim(string file)
 {
 	ifstream ifile(file.c_str(), ifstream::in);
 	while(ifile.good())
@@ -30,12 +30,12 @@ void LogicSim::parseSimFile(string file)
 			{
 				case INPUTS	:
 				{
-					pos.push_back(firsttoken);
+					pis.push_back(firsttoken);
 					while(ss.good())
 					{
 						string temp;
 						ss >> temp;
-						pos.push_back(temp);
+						pis.push_back(temp);
 					}
 					break;
 				}
@@ -77,7 +77,9 @@ void LogicSim::parseSimFile(string file)
 
 void LogicSim::runSimulation(deque<Net *> topolist)
 {
-	
+	for(deque<Net*>::iterator it=topolist.begin(); it!=topolist.end(); it++) {
+	  LOG((*it)->name());
+	}
 }
 
 void LogicSim::outputTheFile(string file)

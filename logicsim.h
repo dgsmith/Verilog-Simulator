@@ -13,12 +13,13 @@ int defineLine(string identifier);
 
 class LogicSim	{
 	public:
-		void parseSimFile(string file);
+		LogicSim(string file);
 		void runSimulation(deque<Net *> topolist);
 		void outputTheFile(string file);
 	private:
-		vector<string> pos;
-		vector<vector<int> > values(10);
+		vector<string> pis;
+		vector<vector<int> > values;
+		
 };
 
 #endif
