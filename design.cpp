@@ -291,7 +291,6 @@ Net* Design::DFSvisit(Net* currentNet)
 	currentNet->color = GREY;
 	for(vector<Gate *>::iterator gate = currentNet->getDrivers()->begin(); gate != currentNet->getDrivers()->end(); gate++)
 	{
-		cout << (*gate)->getInputs()->size() << endl;
 		for(vector<Net *>:: iterator net = (*gate)->getInputs()->begin(); net != (*gate)->getInputs()->end(); net++)
 		{
 			if((*net)->color == WHITE)	{

@@ -18,8 +18,6 @@ void LogicSim::parseSimFile(string file)
 	{
 		lineNum++;
 		
-		vector<string> pos;
-		vector<vector<int> > values;
 		vector<vector<int> >::iterator tests = values.begin();
 		
 		string currentline;
@@ -39,10 +37,12 @@ void LogicSim::parseSimFile(string file)
 						ss >> temp;
 						pos.push_back(temp);
 					}
+					break;
 				}
 				case VALUES	:
 				{
-					tests->push_back(atoi(firsttoken.c_str()));
+					int a = atoi(firsttoken.c_str());
+					tests->push_back(a);
 					while(ss.good())
 					{
 						int temp;
@@ -50,14 +50,17 @@ void LogicSim::parseSimFile(string file)
 						tests->push_back(temp);
 					}
 					tests++;
+					break;
 				}
 				case BLANK	:
 				{
 					// done reading
+					break;
 				}
 				default	:
 				{
 					throw runtime_error("grammar error");
+					break;
 				}
 			}
 		} catch(runtime_error &ex)	{
