@@ -24,7 +24,7 @@ class Net {
   string name();
   void setVal(char v);
   char computeVal();
-	char computeDelay();
+	int computeDelay();
   char getVal();
   void printDriversLoads();
 	int color;
