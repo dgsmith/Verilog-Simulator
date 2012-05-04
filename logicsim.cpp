@@ -49,6 +49,10 @@ LogicSim::LogicSim(string file, Design *design)
             }
             
 					}
+          
+          // Check size
+          if(design->get_pi_nets().size() != pi_set.size())
+            throw runtime_error("PI count in sim disagrees with definition");
 					break;
 				}
 				case VALUES	:
@@ -71,18 +75,17 @@ LogicSim::LogicSim(string file, Design *design)
               line[pi_order.at(index)] = tmp;
             else {
               stringstream ss;
-              ss << "The number of input values for a vector is less than the number of PI's specified on the first line";
+              ss << "The number of input values for a vector is not equal to than the number of PI's specified on the first line";
               throw runtime_error(ss.str());
               
             }
           } 
               
-          
-          
+                  
           // Check count
           if(line.size() != pi_order.size()) {
             stringstream ss;
-            ss << "The number of input values for a vector is less than the number of PI's specified on the first line";
+            ss << "The number of input values for a vector is not equal to than the number of PI's specified on the first line";
             throw runtime_error(ss.str());
           }
           

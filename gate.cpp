@@ -345,7 +345,6 @@ char Nor::eval()
 			}
 		}
 	}
-	return val;
   
   // Now invert
   if(val == '1')
