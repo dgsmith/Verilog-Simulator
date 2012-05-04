@@ -5,11 +5,13 @@
 
 using namespace std;
 
+int defineLine(string identifier);
+
 class LogicSim	{
 	public:
-		void parseSimFile(string filename);
-		void runSimulation();
-		void outputFile(string filename);
+		void parseSimFile(string file);
+		void runSimulation(deque<Net *> *topolist);
+		void outputTheFile(string file);
 	private:
 		
 };
