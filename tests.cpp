@@ -3,6 +3,7 @@
 #include <cassert>
 #include "design.h"
 #include "parser.h"
+#include "logicsim.h"
 
 using namespace std;
 
@@ -106,11 +107,19 @@ void test_delay()
   cout << "output " << output->computeDelay() << endl;
 }
 
+void test_simulation()
+{
+  Design *design = parseThatShit("adder4.v");
+  LogicSim sim("adder4.sim");
+  
+}
+
 int main (int argc, char const *argv[])
 {
   //test_net();
   // test_gates();
-  test_delay();
+  // test_delay();
+  test_simulation();
 	
 
   cout << GREEN << "Tests completed." << RESET << endl;
