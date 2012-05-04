@@ -99,7 +99,22 @@ void Net::printDriversLoads()
   
 }
 
-char computeDelay()
+int Net::computeDelay()
 {
-	
+  if(drivers->size() == 0) {
+    return 0; // Input gate
+  }
+  int cumulativeMaxVal = 0;
+  for(vector<Gate*>::iterator it=drivers->begin(); it!=drivers->end(); it++) {
+    Gate *g = *it;
+    
+    // Find max values of the gate's nets
+    int maxVal = 0;
+    for(vector<Net*>::iterator jt=g->getInputs()->begin(); jt!=g->getInputs()->end(); jt++) {
+      maxVal = max(maxVal, (*jt)->computeDelay());
+    }
+    
+    cumulativeMaxVal = max(cumulativeMaxVal, maxVal + g->getDelay());
+  }
+	return cumulativeMaxVal;
 }
