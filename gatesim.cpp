@@ -7,6 +7,7 @@
 #include <fstream>
 #include <string>
 #include "parser.h"
+#include "logicsim.h"
 
 using namespace std;
 
@@ -27,7 +28,7 @@ int main (int argc, char const *argv[])
 			return 1;
 	  }
 	string ifile = argv[1];
-	string sfile = argv[2]
+	string sfile = argv[2];
 	string ofile = argv[3];
 	
 	Design *a;
@@ -35,7 +36,7 @@ int main (int argc, char const *argv[])
 	try{
 		a = parseThatShit(ifile);
 		a->toposort();
-		list = a->get_toposortedList();
+		deque<Net *> list = a->get_toposortedList();
 		sim.parseSimFile(sfile);
 		sim.runSimulation(list);
 	} catch(runtime_error &ex)	{

@@ -1,15 +1,15 @@
 #include "logicsim.h"
 #include <iostream>
+#include <fstream>
+#include <ostream>
+#include <sstream>
+#include <stdexcept>
+#include <vector>
 
 using namespace std;
 
 static unsigned int lineNum = 0;
 enum{INPUTS, VALUES, BLANK};
-
-LogicSim::LogicSim()
-{
-	
-}
 
 void LogicSim::parseSimFile(string file)
 {
@@ -18,18 +18,59 @@ void LogicSim::parseSimFile(string file)
 	{
 		lineNum++;
 		
+		vector<string> pos;
+		vector<vector<int>> values;
+		vector<vector<int>>::iterator tests = values.begin();
+		
 		string currentline;
 		getline(ifile, currentline);
 		stringstream ss(currentline);
 		string firsttoken;
 		ss >> firsttoken;
 		try{
-			switch
+			switch(defineLine(firsttoken))
+			{
+				case INPUTS	:
+				{
+					pos.push_back(firsttoken);
+					while(ss.good())
+					{
+						string temp;
+						ss >> temp;
+						pos.push_back(temp);
+					}
+				}
+				case VALUES	:
+				{
+					values->push_back(firsttoken);
+					while(ss.good())
+					{
+						int temp;
+						ss >> temp;
+						values->push_back(temp);
+					}
+					tests++;
+				}
+				case BLANK	:
+				{
+					// done reading
+				}
+				default	:
+				{
+					throw runtime_error("grammar error");
+				}
+			}
+		} catch(runtime_error &ex)	{
+			string line;
+			stringstream ss;
+			ss << lineNum;
+			line = ss.str();
+			throw runtime_error("On line " + line + " " + ex.what());
 		}
 	}
 }
 
-void LogicSim::runSimulation(deque<Net *> *topolist)
+void LogicSim::runSimulation(deque<Net *> topolist)
 {
 	
 }
