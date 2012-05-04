@@ -6,6 +6,7 @@
 #include "design.h"
 #include <string>
 #include <deque>
+#include <set>
 
 using namespace std;
 
@@ -15,10 +16,12 @@ class LogicSim	{
 	public:
 		LogicSim(string file);
 		void runSimulation(deque<Net *> topolist);
-		void outputTheFile(string file);
-	private:
-		vector<string> pis;
-		vector<vector<int> > values;
+		void outputTheFile(string file, Design* design);
+  public:
+    vector<string> pi_order;
+    set<string> pi_set;
+		vector<map<string,char> > values;
+    vector<map<string,char> > results;
 		
 };
 

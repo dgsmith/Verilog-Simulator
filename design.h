@@ -42,6 +42,7 @@ class Design {
 	Net* DFSvisit(Net* currentNet);
 	void toposort();
 	deque<Net *> get_toposortedList();
+  map<string, Net*>* get_design_nets() { return &design_nets; }
  private:
   string desname;
   map<string, Net *> design_nets;

@@ -17,10 +17,7 @@ LogicSim::LogicSim(string file)
 	while(ifile.good())
 	{
 		lineNum++;
-		
-		vector<vector<int> >::iterator tests = values.begin();
-		values.resize(10);
-		
+    				
 		string currentline;
 		getline(ifile, currentline);
 		stringstream ss(currentline);
@@ -31,26 +28,32 @@ LogicSim::LogicSim(string file)
 			{
 				case INPUTS	:
 				{
-					pis.push_back(firsttoken);
+					pi_order.push_back(firsttoken);
+          pi_set.insert(firsttoken);
+          
 					while(ss.good())
 					{
 						string temp;
 						ss >> temp;
-						pis.push_back(temp);
+						pi_order.push_back(temp);
+            pi_set.insert(temp);
 					}
 					break;
 				}
 				case VALUES	:
 				{
-					int a = atoi(firsttoken.c_str());
-					tests->push_back(a);
-					while(ss.good())
-					{
-						int temp;
-						ss >> temp;
-						tests->push_back(temp);
-					}
-					tests++;
+          map<string, char> line;
+          int index = 0;
+          line[pi_order.at(index)] = firsttoken[0];
+          while(ss.good()) {
+            index++;
+            char tmp;
+            ss >> tmp;
+            if(index < pi_order.size())
+              line[pi_order.at(index)] = tmp;
+          }
+          
+          values.push_back(line);
 					break;
 				}
 				case BLANK	:
@@ -78,14 +81,69 @@ LogicSim::LogicSim(string file)
 
 void LogicSim::runSimulation(deque<Net *> topolist)
 {
-	for(deque<Net*>::iterator it=topolist.begin(); it!=topolist.end(); it++) {
-	  LOG((*it)->name());
-	}
+  // For each line in the sim
+  for(vector<map<string,char> >::iterator lineit=values.begin();
+  lineit!=values.end();
+  lineit++) 
+  {
+    map<string,char> values = *lineit;
+    map<string,char> result;
+    
+    for(deque<Net*>::iterator it=topolist.begin();
+    it!=topolist.end();
+    it++)
+    {
+      Net *n = *it;
+      string name = n->name();
+      if(pi_set.find(name) != pi_set.end()) {
+        n->setVal(values[name]);
+        LOG("Set input value of " << name << " to " << values[name]);
+      } else {
+        n->computeVal();
+        LOG("Computed value of " << name << " is " << n->getVal());
+        result[name] = n->getVal();
+      }
+    }
+    cout << endl;
+    
+    results.push_back(result);
+  
+  }
 }
 
-void LogicSim::outputTheFile(string file)
+void LogicSim::outputTheFile(string file, Design* design)
 {
+  ofstream outfile(file.c_str());
+
+  // Header
+  for(vector<string>::iterator it=pi_order.begin(); it!=pi_order.end(); it++) {
+    outfile << *it << " ";
+  }
+  outfile << "=> ";
+  for(vector<Net*>::iterator it=design->get_po_nets().begin(); it!=design->get_po_nets().end(); it++) {
+    outfile << (*it)->name() << " ";
+  }
+  outfile << endl;
+  
+  // For each line
+  for(vector<map<string,char> >::iterator it=values.begin(); it!=values.end(); it++){
+    map<string,char> value = *it;
+    for(vector<string>::iterator jt=pi_order.begin(); jt!=pi_order.end(); jt++) {
+      outfile << value[*jt] << " ";
+    }
+    outfile << "=> ";
+    int maxDelay = 0;
+    for(vector<Net*>::iterator jt=design->get_po_nets().begin(); jt!=design->get_po_nets().end(); jt++) {
+      outfile << (*jt)->getVal();
+      if(jt+1 != design->get_po_nets().end())
+        outfile << " ";
+      maxDelay = max(maxDelay, (*jt)->computeDelay());
+    }    
+    outfile << "@" << maxDelay << endl;
+  }
+  
 	
+  outfile.close();
 }
 
 int defineLine(string identifier)

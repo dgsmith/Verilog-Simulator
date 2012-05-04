@@ -101,14 +101,17 @@ char And::eval()
 			case 'X':
 			{
 				val = inputs->front()->getVal();
+        break;
 			}
 			case '0':
 			{
 				val = inputs->front()->getVal();
+        break;
 			}
 			case '1':
 			{
 				val = inputs->front()->getVal();
+        break;
 			}
 		}
 	}
@@ -193,14 +196,17 @@ char Or::eval()
 			case 'X':
 			{
 				val = inputs->front()->getVal();
+        break;
 			}
 			case '0':
 			{
 				val = inputs->front()->getVal();
+        break;
 			}
 			case '1':
 			{
 				val = inputs->front()->getVal();
+        break;
 			}
 		}
 	}
@@ -285,14 +291,17 @@ char Nor::eval()
 			case 'X':
 			{
 				val = inputs->front()->getVal();
+        break;
 			}
 			case '0':
 			{
 				val = '1';
+        break;
 			}
 			case '1':
 			{
 				val = '0';
+        break;
 			}
 		}
 	}
@@ -385,14 +394,17 @@ char Nand::eval()
 			case 'X':
 			{
 				val = inputs->front()->getVal();
+        break;
 			}
 			case '0':
 			{
 				val = '1';
+        break;
 			}
 			case '1':
 			{
 				val = '0';
+        break;
 			}
 		}
 	}
@@ -485,14 +497,17 @@ char Xor::eval()
 			case 'X':
 			{
 				val = inputs->front()->getVal();
+        break;
 			}
 			case '0':
 			{
 				val = inputs->front()->getVal();
+        break;
 			}
 			case '1':
 			{
 				val = '0';
+        break;
 			}
 		}
 	}
@@ -577,14 +592,17 @@ char Not::eval()
 			case 'X':
 			{
 				val = inputs->front()->getVal();
+        break;
 			}
 			case '0':
 			{
 				val = '1';
+        break;
 			}
 			case '1':
 			{
 				val = '0';
+        break;
 			}
 		}
 	}

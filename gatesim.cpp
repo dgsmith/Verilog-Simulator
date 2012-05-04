@@ -1,5 +1,5 @@
 /**
-* PA5 Part 1
+* PA6
 * Chris Li, Grayson Smith
 */
 #include "global.h"
@@ -10,15 +10,6 @@
 #include "logicsim.h"
 
 using namespace std;
-
-void dumpToFile(string from, string filename, Design* aDesign)
-{
-  ofstream outfile(filename.c_str());
-  outfile << "// Dumped from " << from << endl;
-  aDesign->dump(outfile); 
-  
-  outfile.close();
-}
 
 int main (int argc, char const *argv[])
 {

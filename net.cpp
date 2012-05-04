@@ -14,6 +14,7 @@ Net::Net(string n)
   
 	netname = n;
   val = 'X';
+  color = WHITE;
 }
 
 void Net::addDriver(Gate *g)

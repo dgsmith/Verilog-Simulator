@@ -109,9 +109,11 @@ void test_delay()
 
 void test_simulation()
 {
-  Design *design = parseThatShit("adder4.v");
-  LogicSim sim("adder4.sim");
-  
+  Design *design = parseThatShit("test.v");
+  LogicSim sim("test.sim");
+  design->toposort();
+  sim.runSimulation(design->get_toposortedList());
+  sim.outputTheFile("test.out", design);
 }
 
 int main (int argc, char const *argv[])
