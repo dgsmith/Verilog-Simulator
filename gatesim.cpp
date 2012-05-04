@@ -39,7 +39,17 @@ int main (int argc, char const *argv[])
 		return -1;
 	}
 	dumpToFile(ifile, ofile, a);
-  
+	a->toposort();
+	
+	WARN("at the end here");
+	deque<Net *> list;
+	list = a->get_toposortedList();
+	for(deque<Net *>::iterator it = list.begin(); it != list.end(); it++)
+	{
+		WARN("in the for loop");
+		LOG((*it)->name());
+	}
+
   delete a;
   
   return 0;

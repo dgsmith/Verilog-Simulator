@@ -272,32 +272,52 @@ void Design::dump(ostream &os)
 
 void Design::toposort()
 {
-	vector<Net*>::iterator it = this->get_po_nets().begin();
-	for(; it != this->get_po_nets().end(); it++)
+	vector<Net*>::iterator it;
+	LOG("Entering toposort");
+	for(it = this->get_po_nets().begin(); it != this->get_po_nets().end(); it++)
 	{
 		(*it)->color = WHITE;
 	}
 	toposortedList.clear();
-	for(; it != this->get_po_nets().end(); it++)
+	for(it = this->get_po_nets().begin(); it != this->get_po_nets().end(); it++)
 	{
+		LOG("iterating through po nets");
 		if((*it)->color == WHITE)	{
+			LOG("color was white, dfs visit");
 			this->DFSvisit(*it);
 		}
 	}
+	for(deque<Net *>::iterator it = toposortedList.begin(); it != toposortedList.end(); it++)
+	{
+		WARN("topolist");
+		LOG((*it)->name());
+	}
 }
 
-void Design::DFSvisit(Net* currentNet)
+Net* Design::DFSvisit(Net* currentNet)
 {
 	currentNet->color = GREY;
+	LOG("changed color to grey");
 	for(vector<Gate *>::iterator gate = currentNet->getDrivers()->begin(); gate != currentNet->getDrivers()->end(); gate++)
 	{
+		cout << (*gate)->getInputs()->size() << endl;
 		for(vector<Net *>:: iterator net = (*gate)->getInputs()->begin(); net != (*gate)->getInputs()->end(); net++)
 		{
 			if((*net)->color == WHITE)	{
+				LOG("net " << (*net)->name() << " was white");
 				this->DFSvisit(*net);
+			}
+			else if((*net)->color == GREY)	{
+				LOG("net " << (*net)->name() << " was grey");
+				(*net)->color = BLACK;
 			}
 		}
 	}
-	currentNet->color = BLACK;
 	toposortedList.push_back(currentNet);
+	return currentNet;
+}
+
+deque<Net *> Design::get_toposortedList()
+{
+	return toposortedList;
 }

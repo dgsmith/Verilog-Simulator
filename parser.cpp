@@ -124,6 +124,7 @@ Design *parseThatShit(string ifilename)
  							gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
  							LOG("output:");
  							LOG(currentGatePuts.front());
+							theDesign->find_net(currentGatePuts.front())->addDriver(gatefound);
  						} catch(range_error &ex)	{
  							string out;
  							stringstream ss;
@@ -137,6 +138,7 @@ Design *parseThatShit(string ifilename)
  							LOG(*it);
  							try	{
  								gatefound->addInput(theDesign->find_net(*it));
+								theDesign->find_net(*it)->addLoad(gatefound);
  							} catch(range_error &ex)	{
  								string out;
  								stringstream ss;
@@ -153,6 +155,7 @@ Design *parseThatShit(string ifilename)
  							gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
  							LOG("output:");
  							LOG(currentGatePuts.front());
+							theDesign->find_net(currentGatePuts.front())->addDriver(gatefound);
  						} catch(range_error &ex)	{
  							string out;
  							stringstream ss;
@@ -166,6 +169,7 @@ Design *parseThatShit(string ifilename)
  							LOG(*it);
  							try	{
  								gatefound->addInput(theDesign->find_net(*it));
+								theDesign->find_net(*it)->addLoad(gatefound);
  							} catch(range_error &ex)	{
  								string out;
  								stringstream ss;
@@ -182,6 +186,7 @@ Design *parseThatShit(string ifilename)
  							gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
  							LOG("output:");
  							LOG(currentGatePuts.front());
+							theDesign->find_net(currentGatePuts.front())->addDriver(gatefound);
  						} catch(range_error &ex)	{
  							string out;
  							stringstream ss;
@@ -195,6 +200,7 @@ Design *parseThatShit(string ifilename)
  							LOG(*it);
  							try	{
  								gatefound->addInput(theDesign->find_net(*it));
+								theDesign->find_net(*it)->addLoad(gatefound);
  							} catch(range_error &ex)	{
  								string out;
  								stringstream ss;
@@ -211,6 +217,7 @@ Design *parseThatShit(string ifilename)
  							gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
  							LOG("output:");
  							LOG(currentGatePuts.front());
+							theDesign->find_net(currentGatePuts.front())->addDriver(gatefound);
  						} catch(range_error &ex)	{
  							string out;
  							stringstream ss;
@@ -224,6 +231,7 @@ Design *parseThatShit(string ifilename)
  							LOG(*it);
  							try	{
  								gatefound->addInput(theDesign->find_net(*it));
+								theDesign->find_net(*it)->addLoad(gatefound);
  							} catch(range_error &ex)	{
  								string out;
  								stringstream ss;
@@ -240,6 +248,7 @@ Design *parseThatShit(string ifilename)
  							gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
  							LOG("output:");
  							LOG(currentGatePuts.front());
+							theDesign->find_net(currentGatePuts.front())->addDriver(gatefound);
  						} catch(range_error &ex)	{
  							string out;
  							stringstream ss;
@@ -253,6 +262,7 @@ Design *parseThatShit(string ifilename)
  							LOG(*it);
  							try	{
  								gatefound->addInput(theDesign->find_net(*it));
+								theDesign->find_net(*it)->addLoad(gatefound);
  							} catch(range_error &ex)	{
  								string out;
  								stringstream ss;
@@ -269,6 +279,7 @@ Design *parseThatShit(string ifilename)
  							gatefound->addOutput(theDesign->find_net(currentGatePuts.front()));
  							LOG("output:");
  							LOG(currentGatePuts.front());
+							theDesign->find_net(currentGatePuts.front())->addDriver(gatefound);
  						} catch(range_error &ex)	{
  							string out;
  							stringstream ss;
@@ -282,6 +293,7 @@ Design *parseThatShit(string ifilename)
  							LOG(*it);
  							try	{
  								gatefound->addInput(theDesign->find_net(*it));
+								theDesign->find_net(*it)->addLoad(gatefound);
  							} catch(range_error &ex)	{
  								string out;
  								stringstream ss;

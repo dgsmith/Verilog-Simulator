@@ -39,8 +39,9 @@ class Design {
   vector<Net *> all_nets();
   vector<Gate *> all_gates();
   void dump(ostream &os);
-	void DFSvisit(Net* currentNet);
+	Net* DFSvisit(Net* currentNet);
 	void toposort();
+	deque<Net *> get_toposortedList();
  private:
   string desname;
   map<string, Net *> design_nets;
