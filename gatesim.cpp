@@ -29,7 +29,7 @@ int main (int argc, char const *argv[])
 		deque<Net *> list = a->get_toposortedList();
 		LogicSim sim(sfile);
 		sim.runSimulation(list);
-		sim.outputTheFile(ofile);
+		sim.outputTheFile(ofile, a);
 	} catch(runtime_error &ex)	{
     stringstream ss;
     ss << "Reason: " << ex.what();

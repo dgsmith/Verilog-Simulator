@@ -281,7 +281,6 @@ void Design::toposort()
   // For each node with no outgoing edges
 	for(it = this->get_po_nets().begin(); it != this->get_po_nets().end(); it++)
 	{
-    ERROR("Consider " << (*it)->name() );
     // If N has not been marked as visited
 		if((*it)->color == WHITE)	{
 			this->DFSvisit(*it);
@@ -289,8 +288,15 @@ void Design::toposort()
 	}
 }
 
-Net* Design::DFSvisit(Net* currentNet)
+void tabin(int depth) {
+  for(int i=0; i<depth; i++) {
+    cout << "\t";
+  }
+}
+Net* Design::DFSvisit(Net* currentNet, int depth)
 {
+  cout << endl;
+  tabin(depth);
   cout << "Visiting " << currentNet->name() << ", which depends on: ";
 	currentNet->color = GREY;
   // For each driver
@@ -300,15 +306,20 @@ Net* Design::DFSvisit(Net* currentNet)
     // And each driver's nets
 		for(vector<Net *>:: iterator net = (*gate)->getInputs()->begin(); net != (*gate)->getInputs()->end(); net++)
 		{
-      cout << "Net: " << (*net)->name() << " color " << (*net)->color << endl;
+      tabin(depth);
+      cout << "Net: " << (*net)->name() << " color " << (*net)->color;
 			if((*net)->color == WHITE)	{
-				this->DFSvisit(*net);
+				this->DFSvisit(*net, depth+1);
 			}
 			else if((*net)->color == GREY)	{
 				(*net)->color = BLACK;
 			}
 		}
 	}
+  
+  if(currentNet->getDrivers()->size() == 0)
+    cout << endl;
+  
 	toposortedList.push_back(currentNet	);
 	return currentNet;
 }

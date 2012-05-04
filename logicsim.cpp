@@ -126,20 +126,18 @@ void LogicSim::outputTheFile(string file, Design* design)
   outfile << endl;
   
   // For each line
+  int index = 0;
   for(vector<map<string,char> >::iterator it=values.begin(); it!=values.end(); it++){
     map<string,char> value = *it;
     for(vector<string>::iterator jt=pi_order.begin(); jt!=pi_order.end(); jt++) {
       outfile << value[*jt] << " ";
     }
     outfile << "=> ";
-    int maxDelay = 0;
     for(vector<Net*>::iterator jt=design->get_po_nets().begin(); jt!=design->get_po_nets().end(); jt++) {
-      outfile << (*jt)->getVal();
-      if(jt+1 != design->get_po_nets().end())
-        outfile << " ";
-      maxDelay = max(maxDelay, (*jt)->computeDelay());
-    }    
-    outfile << "@" << maxDelay << endl;
+      outfile << results.at(index)[(*jt)->name()] << "@" << (*jt)->computeDelay() << " ";
+    }
+    index++;
+    outfile << endl;
   }
   
 	
