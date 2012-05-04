@@ -272,14 +272,10 @@ void Design::dump(ostream &os)
 
 void Design::toposort()
 {
-	vector<Net*>::iterator it;
-	for(it = this->get_po_nets().begin(); it != this->get_po_nets().end(); it++)
-	{
-		(*it)->color = WHITE;
-	}
 	toposortedList.clear();
   // For each node with no outgoing edges
-	for(it = this->get_po_nets().begin(); it != this->get_po_nets().end(); it++)
+  vector<Net*> nodes = get_po_nets();
+	for(it = nodes.begin(); it != nodes.end(); it++)
 	{
     // If N has not been marked as visited
 		if((*it)->color == WHITE)	{
