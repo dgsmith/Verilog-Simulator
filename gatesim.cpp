@@ -32,13 +32,13 @@ int main (int argc, char const *argv[])
 	string ofile = argv[3];
 	
 	Design *a;
-	LogicSim sim;
 	try{
 		a = parseThatShit(ifile);
 		a->toposort();
 		deque<Net *> list = a->get_toposortedList();
-		sim.parseSimFile(sfile);
+		LogicSim sim(sfile);
 		sim.runSimulation(list);
+		sim.outputTheFile(ofile);
 	} catch(runtime_error &ex)	{
     stringstream ss;
     ss << "Reason: " << ex.what();
@@ -46,7 +46,6 @@ int main (int argc, char const *argv[])
 		return -1;
 	}
 	//dumpToFile(ifile, ofile, a);
-	sim.outputTheFile(ofile);
 	
   delete a;
   

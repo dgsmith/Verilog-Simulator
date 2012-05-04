@@ -19,6 +19,7 @@ LogicSim::LogicSim(string file)
 		lineNum++;
 		
 		vector<vector<int> >::iterator tests = values.begin();
+		values.resize(10);
 		
 		string currentline;
 		getline(ifile, currentline);
