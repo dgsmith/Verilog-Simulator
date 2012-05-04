@@ -27,7 +27,7 @@ int main (int argc, char const *argv[])
 		a = parseThatShit(ifile);
 		a->toposort();
 		deque<Net *> list = a->get_toposortedList();
-		LogicSim sim(sfile);
+		LogicSim sim(sfile, a);
 		sim.runSimulation(list);
 		sim.outputTheFile(ofile, a);
 	} catch(runtime_error &ex)	{

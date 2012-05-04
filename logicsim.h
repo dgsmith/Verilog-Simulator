@@ -14,7 +14,7 @@ int defineLine(string identifier);
 
 class LogicSim	{
 	public:
-		LogicSim(string file);
+		LogicSim(string file, Design *design);
 		void runSimulation(deque<Net *> topolist);
 		void outputTheFile(string file, Design* design);
   public:

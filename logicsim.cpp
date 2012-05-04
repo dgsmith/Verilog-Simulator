@@ -11,7 +11,7 @@ using namespace std;
 static unsigned int lineNum = 0;
 enum{INPUTS, VALUES, BLANK};
 
-LogicSim::LogicSim(string file)
+LogicSim::LogicSim(string file, Design *design)
 {
 	ifstream ifile(file.c_str(), ifstream::in);
 	while(ifile.good())
@@ -31,12 +31,23 @@ LogicSim::LogicSim(string file)
 					pi_order.push_back(firsttoken);
           pi_set.insert(firsttoken);
           
+          // Check existence
+          if(design->get_design_nets()->find(firsttoken) == design->get_design_nets()->end()) {
+            throw runtime_error("A specified PI on the first line does not exist in the design");
+          }
+          
 					while(ss.good())
 					{
 						string temp;
 						ss >> temp;
 						pi_order.push_back(temp);
             pi_set.insert(temp);
+            
+            // Check existence
+            if(design->get_design_nets()->find(temp) == design->get_design_nets()->end()) {
+              throw runtime_error("A specified PI on the first line does not exist in the design");
+            }
+            
 					}
 					break;
 				}
@@ -45,12 +56,34 @@ LogicSim::LogicSim(string file)
           map<string, char> line;
           int index = 0;
           line[pi_order.at(index)] = firsttoken[0];
+          if(!(firsttoken[0] == '1' || firsttoken[0] == '0' || firsttoken[0] == 'X')) { throw runtime_error("Input is not in the set {1, 0, X}");}
           while(ss.good()) {
             index++;
             char tmp;
             ss >> tmp;
+            if(!ss.good()) {
+              break;
+            }
+            
+            if(!(tmp == '1' || tmp == '0' || tmp == 'X')) { throw runtime_error("Input is not in the set {1, 0, X}");}
+            
             if(index < pi_order.size())
               line[pi_order.at(index)] = tmp;
+            else {
+              stringstream ss;
+              ss << "The number of input values for a vector is less than the number of PI's specified on the first line";
+              throw runtime_error(ss.str());
+              
+            }
+          } 
+              
+          
+          
+          // Check count
+          if(line.size() != pi_order.size()) {
+            stringstream ss;
+            ss << "The number of input values for a vector is less than the number of PI's specified on the first line";
+            throw runtime_error(ss.str());
           }
           
           values.push_back(line);
@@ -80,7 +113,7 @@ LogicSim::LogicSim(string file)
 }
 
 void LogicSim::runSimulation(deque<Net *> topolist)
-{
+{  
   // For each line in the sim
   for(vector<map<string,char> >::iterator lineit=values.begin();
   lineit!=values.end();
