@@ -156,7 +156,8 @@ void LogicSim::outputTheFile(string file, Design* design)
     outfile << *it << " ";
   }
   outfile << "=> ";
-  for(vector<Net*>::iterator it=design->get_po_nets().begin(); it!=design->get_po_nets().end(); it++) {
+  vector<Net*> nets = design->get_po_nets();
+  for(vector<Net*>::iterator it=nets.begin(); it!=nets.end(); it++) {
     outfile << (*it)->name() << " ";
   }
   outfile << endl;
@@ -169,7 +170,8 @@ void LogicSim::outputTheFile(string file, Design* design)
       outfile << value[*jt] << " ";
     }
     outfile << "=> ";
-    for(vector<Net*>::iterator jt=design->get_po_nets().begin(); jt!=design->get_po_nets().end(); jt++) {
+    vector<Net*> pos = design->get_po_nets();
+    for(vector<Net*>::iterator jt=pos.begin(); jt!=pos.end(); jt++) {
       outfile << results.at(index)[(*jt)->name()] << "@" << (*jt)->computeDelay() << " ";
     }
     index++;
