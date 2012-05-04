@@ -19,8 +19,8 @@ void LogicSim::parseSimFile(string file)
 		lineNum++;
 		
 		vector<string> pos;
-		vector<vector<int>> values;
-		vector<vector<int>>::iterator tests = values.begin();
+		vector<vector<int> > values;
+		vector<vector<int> >::iterator tests = values.begin();
 		
 		string currentline;
 		getline(ifile, currentline);
@@ -42,12 +42,12 @@ void LogicSim::parseSimFile(string file)
 				}
 				case VALUES	:
 				{
-					values->push_back(firsttoken);
+					tests->push_back(atoi(firsttoken.c_str()));
 					while(ss.good())
 					{
 						int temp;
 						ss >> temp;
-						values->push_back(temp);
+						tests->push_back(temp);
 					}
 					tests++;
 				}
@@ -68,6 +68,8 @@ void LogicSim::parseSimFile(string file)
 			throw runtime_error("On line " + line + " " + ex.what());
 		}
 	}
+	
+	
 }
 
 void LogicSim::runSimulation(deque<Net *> topolist)
